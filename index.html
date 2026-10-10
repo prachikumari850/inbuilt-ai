@@ -1,131 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inbuilt — AI · Software · Data</title>
+  <title>Inbuilt AI — Ideas. Products. Impact.</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: { DEFAULT: '#6C5CE7', dark: '#5545D4' },
+            navy: '#0A1235',
+            ink: '#0F172A',
+            muted: '#5B6478',
+            line: '#E7E9F5',
+            soft: '#F5F4FF',
+            accent: '#2563EB'
+          }
+        }
+      }
+    };
+  </script>
   <script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
 
-  <!-- Main Navigation -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-[var(--line)]">
-    <div class="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between gap-6">
-      <a href="#/" id="brand" aria-label="Inbuilt home"></a>
-      <nav class="hidden lg:flex items-center gap-7" aria-label="Primary" id="nav"></nav>
-      <div class="flex items-center gap-3">
-        <button class="grid place-items-center w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 transition" aria-label="Search">
+<body class="font-sans text-ink bg-white antialiased">
+
+  <header class="site-header">
+    <div class="max-w-7xl mx-auto px-5 h-full flex items-center justify-between gap-6">
+
+      <a href="#/" class="brand shrink-0" aria-label="Inbuilt AI home">
+        <span class="brand-mark">INBUILT</span>
+        <span class="brand-tag">AI · SOFTWARE · DATA</span>
+      </a>
+
+      <nav id="nav" class="hidden lg:flex items-center gap-8 h-full" aria-label="Primary"></nav>
+
+      <div class="flex items-center gap-3 shrink-0">
+        <button class="icon-btn" aria-label="Search" data-action="search">
           <i data-lucide="search" class="w-4 h-4"></i>
         </button>
-        <a href="#/validate" id="hdr-cta" class="btn btn-primary hidden sm:inline-flex !py-2">Start a Project</a>
-        <button id="menu-btn" class="lg:hidden p-2" aria-label="Menu">
+        <a href="#/mvp" class="btn btn-primary hidden sm:inline-flex">Start a Project</a>
+        <button id="menu-btn" class="icon-btn lg:hidden" aria-label="Toggle menu" aria-expanded="false">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
       </div>
     </div>
-    <nav id="mobile-nav" class="hidden lg:hidden border-t border-[var(--line)] px-5 py-3 flex-col gap-3" aria-label="Mobile"></nav>
+
+    <nav id="mobile-nav" class="hidden lg:hidden border-t border-line bg-white px-5 py-3" aria-label="Mobile"></nav>
   </header>
 
   <main id="app"></main>
 
-  <!-- Footer -->
-  <footer class="border-t border-[var(--line)] bg-white" id="footer"></footer>
+  <footer id="footer" class="border-t border-line bg-white"></footer>
+
+  <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel">
+      <span class="tile tone-green mx-auto"><i data-lucide="check" class="w-5 h-5"></i></span>
+      <h3 id="modal-title" class="text-xl font-extrabold mt-4">Request received</h3>
+      <p id="modal-text" class="text-sm text-muted mt-2 leading-relaxed"></p>
+      <button class="btn btn-primary mt-6 mx-auto" data-close>Done</button>
+    </div>
+  </div>
 
   <script>
-    const $ = (s, r = document) => r.querySelector(s);
-    const ic = (n, c = '') => `<i data-lucide="${n}" class="${c}"></i>`;
-    const tile = (t, n, c = '') => `<span class="ico t-${t} ${c}">${ic(n)}</span>`;
-    const arrow = ic('arrow-right', 'w-3.5 h-3.5');
-    const btn = (l, h, k = 'primary', x = '') => `<a href="${h}" class="btn btn-${k} ${x}">${l} ${arrow}</a>`;
-    const checks = (a, c = 'text-emerald-500') => a.map(x => `<li class="flex items-start gap-2">${ic('check-circle-2', 'w-4 h-4 shrink-0 mt-0.5 ' + c)}<span>${x}</span></li>`).join('');
-    const sec = (t, s, link, h) => `
-      <div class="flex items-end justify-between gap-4 mb-5">
-        <div>
-          <h2 class="text-2xl font-extrabold tracking-tight">${t}</h2>
-          <p class="text-sm text-[var(--muted)] mt-1">${s}</p>
-        </div>
-        ${link ? `<a href="${h || '#/'}" class="text-xs font-bold text-blue-700 hover:underline inline-flex items-center gap-1 shrink-0">${link} ${arrow}</a>` : ''}
-      </div>`;
-    const wrap = x => `<div class="max-w-7xl mx-auto px-5">${x}</div>`;
-    const crumb = t => `
-      <div class="text-xs text-slate-600 mb-4">
-        <a href="#/" class="hover:text-[var(--primary)]">Home</a> <span class="mx-2">›</span> ${t}
-      </div>`;
-    const tcol = ['blue', 'green', 'cyan', 'violet', 'pink', 'orange'];
-    const ctaBtns = (a, b, ha = '#/validate', hb = '#/services') => `
-      <div class="flex flex-wrap gap-3">
-        ${btn(a, ha)}
-        ${btn(b, hb, 'light')}
-      </div>`;
-    const tick = a => `
-      <ul class="flex flex-wrap gap-x-6 gap-y-2 mt-6 text-xs text-slate-600">
-        ${a.map(x => `<li class="flex items-center gap-1.5">${ic('check', 'w-3.5 h-3.5 text-emerald-500')}${x}</li>`).join('')}
-      </ul>`;
 
-    const steps = (list, cols) => `
-      <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-${cols}">
-        ${list.map((s, i) => `
-          <li class="relative">
-            <div class="flex items-center gap-2">
-              <span class="num t-${s[3]}">${String(i + 1).padStart(2, '0')}</span>
-              ${i < list.length - 1 ? '<span class="hidden lg:block flex-1 border-t border-dashed border-slate-300"></span>' : ''}
-            </div>
-            <h3 class="font-bold text-sm mt-3">${s[0]}</h3>
-            <p class="text-xs text-[var(--muted)] mt-1 leading-relaxed">${s[1]}</p>
-          </li>
-        `).join('')}
-      </ol>`;
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-    const ctaBand = (eyebrow, h, p, stats, bg = 'cta-band') => `
-      <section class="${bg} text-white rounded-2xl mx-5 max-w-7xl xl:mx-auto overflow-hidden my-12">
-        <div class="p-8 md:p-10 grid gap-8 lg:grid-cols-[1.2fr_1fr] items-center">
-          <div>
-            <span class="eyebrow !bg-white/10 !border-white/20 !text-white">${eyebrow}</span>
-            <h2 class="text-2xl md:text-3xl font-extrabold mt-3">${h}</h2>
-            <p class="text-sm text-white/80 mt-2 mb-6">${p}</p>
-            ${ctaBtns('Validate an Idea', 'Start a Project', '#/validate', '#/services')}
+    const icon = (name, cls = '') => `<i data-lucide="${name}" class="${cls}"></i>`;
+    const arrow = icon('arrow-right', 'w-3.5 h-3.5');
+
+    const img = (id, w = 640) =>
+      `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
+
+
+    function button({ label, href = '#/', variant = 'primary', scroll = '', arrowIcon = true, extra = '' }) {
+      const target = scroll ? `href="#/" data-scroll="${scroll}"` : `href="${href}"`;
+      return `
+    <a ${target} class="btn btn-${variant} ${extra}">
+      ${label}${arrowIcon ? arrow : ''}
+    </a>`;
+    }
+
+    function tile(tone, name, size = '') {
+      return `<span class="tile tone-${tone} ${size}">${icon(name)}</span>`;
+    }
+
+    function sectionHeading({ title, subtitle = '', link = '', href = '#/' }) {
+      return `
+    <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-6">
+      <div class="max-w-2xl">
+        <h2 class="text-2xl md:text-[28px] font-extrabold tracking-tight leading-tight">${title}</h2>
+        ${subtitle ? `<p class="text-sm text-muted mt-1.5 leading-relaxed">${subtitle}</p>` : ''}
+      </div>
+      ${link ? `
+        <a href="${href}" class="text-link shrink-0">${link}${arrow}</a>` : ''}
+    </div>`;
+    }
+
+    function checkList(items, tone = 'text-emerald-500', cols = '') {
+      return `
+    <ul class="grid gap-2.5 text-[13px] text-slate-700 ${cols}">
+      ${items.map(text => `
+        <li class="flex items-start gap-2.5">
+          ${icon('check-circle-2', `w-4 h-4 mt-0.5 shrink-0 ${tone}`)}
+          <span class="leading-snug">${text}</span>
+        </li>`).join('')}
+    </ul>`;
+    }
+
+    function iconCards(items, gridClass, { link = false } = {}) {
+      return `
+    <div class="grid gap-4 ${gridClass}">
+      ${items.map(item => `
+        <article class="card card-hover p-5 flex flex-col">
+          ${tile(item.tone, item.icon)}
+          <h3 class="font-bold text-sm leading-snug mt-4">${item.title}</h3>
+          <p class="text-xs text-muted leading-relaxed mt-1.5">${item.text}</p>
+          ${link ? `<span class="text-accent mt-auto pt-4">${arrow}</span>` : ''}
+        </article>`).join('')}
+    </div>`;
+    }
+
+    function steps(items, gridClass) {
+      return `
+    <ol class="grid gap-x-6 gap-y-8 ${gridClass}">
+      ${items.map((step, i) => `
+        <li>
+          <div class="flex items-center gap-3">
+            <span class="step-num tone-${step.tone}">${String(i + 1).padStart(2, '0')}</span>
+            ${i < items.length - 1 ? '<span class="step-line hidden lg:block"></span>' : ''}
           </div>
-          ${stats ? `
-            <div class="grid grid-cols-4 gap-2 text-center">
-              ${stats.map(s => `
-                <div class="glass py-4">
-                  <div class="text-xl font-extrabold">${s[0]}</div>
-                  <div class="text-[10px] text-white/70 mt-1">${s[1]}</div>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-        </div>
-      </section>`;
+          <h3 class="font-bold text-sm mt-3">${step.title}</h3>
+          <p class="text-xs text-muted leading-relaxed mt-1.5">${step.text}</p>
+        </li>`).join('')}
+    </ol>`;
+    }
 
-    const form = (o) => `
-      <form class="rounded-2xl bg-[var(--soft)] border border-[var(--line)] p-6" onsubmit="return submitForm(event)">
-        <div class="flex justify-between items-center">
-          <span class="eyebrow">${ic('target', 'w-3 h-3')} Get Started</span>
-          ${o.step ? '<span class="chip bg-white border border-[var(--line)]">STEP 1 OF 3</span>' : ''}
+    function chips(list) {
+      const tones = ['bg-pink-50 text-pink-600', 'bg-violet-50 text-violet-600', 'bg-blue-50 text-blue-600'];
+      return list.map((text, i) => `<span class="chip ${tones[i % 3]}">${text}</span>`).join('');
+    }
+
+    function eyebrow(text, iconName = '') {
+      return `<span class="eyebrow">${iconName ? icon(iconName, 'w-3 h-3') : ''}${text}</span>`;
+    }
+
+    function breadcrumb(current) {
+      return `
+    <nav class="text-xs text-slate-600 mb-5" aria-label="Breadcrumb">
+      <a href="#/" class="hover:text-brand">Home</a>
+      <span class="mx-2 text-slate-400">›</span>
+      <span class="font-semibold text-ink">${current}</span>
+    </nav>`;
+    }
+
+    function heroChecks(items, tone = 'text-emerald-500') {
+      return `
+    <ul class="flex flex-wrap gap-x-6 gap-y-2 mt-7 text-xs text-slate-600">
+      ${items.map(text => `
+        <li class="flex items-center gap-1.5">${icon('check', `w-3.5 h-3.5 ${tone}`)}${text}</li>`).join('')}
+    </ul>`;
+    }
+
+    function statsRow(stats) {
+      return `
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+      ${stats.map(([value, label]) => `
+        <div class="glass py-4 px-2">
+          <div class="text-xl font-extrabold">${value}</div>
+          <div class="text-[11px] text-white/70 mt-1 leading-tight">${label}</div>
+        </div>`).join('')}
+    </div>`;
+    }
+
+    function ctaBand({ label, title, text, stats = null, variant = 'band-navy' }) {
+      return `
+    <section class="max-w-7xl mx-auto px-5 my-14">
+      <div class="${variant} rounded-2xl text-white p-8 md:p-10 grid gap-8 items-center ${stats ? 'lg:grid-cols-[1.1fr_1fr]' : ''}">
+        <div>
+          ${eyebrow(label, 'rocket').replace('eyebrow', 'eyebrow eyebrow-dark')}
+          <h2 class="text-2xl md:text-3xl font-extrabold leading-tight mt-4">${title}</h2>
+          <p class="text-sm text-white/80 mt-2 leading-relaxed">${text}</p>
+          <div class="flex flex-wrap gap-3 mt-6">
+            ${button({ label: 'Validate an Idea', href: '#/validate' })}
+            ${button({ label: 'Start a Project', href: '#/mvp', variant: 'light' })}
+          </div>
         </div>
-        <h2 class="text-2xl font-extrabold mt-3">${o.title}</h2>
-        <p class="text-sm text-[var(--muted)] mt-1 mb-5">${o.sub}</p>
-        
-        <label class="block text-xs font-bold mb-1" for="${o.id}-t">Idea Title <span class="text-red-500">*</span></label>
-        <input id="${o.id}-t" class="field mb-4" placeholder="e.g. AI tool for automating insurance claims" required>
-        
-        <label class="block text-xs font-bold mb-1" for="${o.id}-d">Description <span class="text-red-500">*</span></label>
-        <div class="relative mb-4">
-          <textarea id="${o.id}-d" rows="4" maxlength="1000" class="field resize-none" placeholder="${o.ph}" required oninput="this.nextElementSibling.textContent=this.value.length+'/1000'"></textarea>
-          <span class="absolute bottom-2 right-3 text-[10px] text-slate-400">0/1000</span>
+        ${stats ? statsRow(stats) : ''}
+      </div>
+    </section>`;
+    }
+
+    function ideaForm({ id, title, subtitle, placeholder, lastLabel, lastPlaceholder, lastOptions, submit, step = false }) {
+      return `
+    <form class="form-panel" data-form="${id}" novalidate>
+      <div class="flex items-center justify-between">
+        ${eyebrow('Get Started', 'target')}
+        ${step ? '<span class="chip bg-white border border-line text-slate-600">STEP 1 OF 3</span>' : ''}
+      </div>
+
+      <h2 class="text-2xl font-extrabold mt-4">${title}</h2>
+      <p class="text-sm text-muted mt-1.5 mb-6 leading-relaxed">${subtitle}</p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="label" for="${id}-title">Idea Title <span class="text-red-500">*</span></label>
+          <input id="${id}-title" name="title" class="field" required
+                 placeholder="e.g. AI tool for automating insurance claims">
+          <p class="field-error" data-error="title">Please enter an idea title.</p>
         </div>
-        
-        <div class="grid grid-cols-2 gap-3 mb-4">
+
+        <div>
+          <label class="label" for="${id}-desc">Description <span class="text-red-500">*</span></label>
+          <div class="relative">
+            <textarea id="${id}-desc" name="description" rows="4" maxlength="1000" required
+                      class="field resize-none pb-7" placeholder="${placeholder}"></textarea>
+            <span class="absolute bottom-2.5 right-3 text-[10px] text-slate-400" data-counter>0/1000</span>
+          </div>
+          <p class="field-error" data-error="description">Please describe your idea.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold mb-1" for="${o.id}-i">Target Industry</label>
-            <select id="${o.id}-i" class="field">
-              <option>Select industry</option>
+            <label class="label" for="${id}-industry">Target Industry</label>
+            <select id="${id}-industry" name="industry" class="field">
+              <option value="">Select industry</option>
               <option>Healthcare</option>
               <option>Insurance</option>
               <option>Technology &amp; SaaS</option>
@@ -133,750 +245,1060 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs font-bold mb-1" for="${o.id}-m">${o.last}</label>
-            <select id="${o.id}-m" class="field">
-              <option>${o.lastPh}</option>
-              <option>B2B</option>
-              <option>B2C</option>
-              <option>Enterprise</option>
+            <label class="label" for="${id}-last">${lastLabel}</label>
+            <select id="${id}-last" name="last" class="field">
+              <option value="">${lastPlaceholder}</option>
+              ${lastOptions.map(o => `<option>${o}</option>`).join('')}
             </select>
           </div>
         </div>
-        
-        <button class="btn btn-primary btn-block">${o.btn} ${arrow}</button>
-      </form>`;
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full mt-6 !py-3">${submit}${arrow}</button>
+    </form>`;
+    }
+
+    function reportPanel() {
+      const bars = ['h-5', 'h-7', 'h-9', 'h-11', 'h-14', 'h-[4.5rem]'];
+      const years = ['2024', '2025', '2026', '2027', '2028', '2029'];
+      const sections = [
+        'Executive Summary', 'Market Analysis', 'Competitive Landscape', 'Customer Insights',
+        'Technology Analysis', 'AI Opportunity', 'MVP Recommendation', 'Risks &amp; Considerations',
+        'Appendix &amp; Sources'
+      ];
+
+      return `
+    <div class="card p-5 md:p-6" id="sample">
+      <div class="flex items-center justify-between gap-3 mb-5">
+        <h3 class="font-extrabold text-lg">Sample Opportunity Report</h3>
+        <span class="chip bg-violet-100 text-violet-700">AI-Powered Analysis</span>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-[150px_1fr]">
+        <ul class="report-nav">
+          ${sections.map((s, i) => `<li class="${i === 0 ? 'is-active' : ''}">${s}</li>`).join('')}
+        </ul>
+
+        <div>
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h4 class="font-bold text-sm">AI-Powered Medical Claims Automation</h4>
+              <p class="text-[10px] text-slate-400 mt-0.5">Generated on Oct 1, 2026</p>
+            </div>
+            <span class="chip bg-emerald-100 text-emerald-700 shrink-0">High Opportunity</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5 mt-4">
+            ${[['$12.5B', 'Est. Market Size'], ['18%', 'CAGR (2024-2030)'], ['High', 'Opportunity Score']].map(([v, l]) => `
+              <div class="border border-line rounded-lg p-2.5">
+                <div class="font-extrabold text-sm">${v}</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">${l}</div>
+              </div>`).join('')}
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2 mt-5">
+            <div>
+              <div class="text-xs font-bold mb-2">Market Opportunity</div>
+              <div class="flex items-end gap-2 h-[4.5rem]">
+                ${bars.map(h => `<div class="bar flex-1 ${h}"></div>`).join('')}
+              </div>
+              <div class="flex gap-2 mt-1.5 text-[9px] text-slate-400">
+                ${years.map(y => `<span class="flex-1 text-center">${y}</span>`).join('')}
+              </div>
+            </div>
+            <p class="text-[11px] text-muted leading-relaxed self-center">
+              Growing demand for automation in healthcare claims processing driven by cost
+              pressure, regulatory changes and AI adoption.
+            </p>
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2 mt-5 items-center">
+            <div class="flex items-center gap-3">
+              <div class="donut shrink-0"></div>
+              <ul class="text-[10px] text-slate-600 space-y-1">
+                <li>Direct Competitors 35%</li>
+                <li>Indirect Competitors 25%</li>
+                <li>Emerging Startups 20%</li>
+                <li>Market Gap 20%</li>
+              </ul>
+            </div>
+            <div>
+              <div class="text-xs font-bold mb-2">Key Insights</div>
+              ${checkList(['Strong market demand', 'Medium competition', 'High AI leverage', 'Clear differentiation opportunity'])}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    }
+
+
+    const NAV = [
+      { label: 'Solutions', href: '#/services', menu: true },
+      { label: 'Services', href: '#/services', key: 'services' },
+      { label: 'Industries', href: '#/', menu: true },
+      { label: 'How We Work', href: '#/mvp', key: 'mvp' },
+      { label: 'Resources', href: '#/validate', menu: true, key: 'validate' },
+      { label: 'About', href: '#/', key: 'home' }
+    ];
+
+    const PARTNERS = [
+      { name: 'AWS', src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg' },
+      { name: 'Microsoft', src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoft.svg' },
+      { name: 'Google Cloud', src: 'https://cdn.simpleicons.org/googlecloud/4285F4' },
+      { name: 'OpenAI', src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg' },
+      { name: 'Anthropic', src: 'https://cdn.simpleicons.org/anthropic/D97757' },
+      { name: 'MongoDB', src: 'https://cdn.simpleicons.org/mongodb/47A248' },
+      { name: 'PostgreSQL', src: 'https://cdn.simpleicons.org/postgresql/4169E1' },
+      { name: 'Docker', src: 'https://cdn.simpleicons.org/docker/2496ED' },
+      { name: 'Kubernetes', src: 'https://cdn.simpleicons.org/kubernetes/326CE5' }
+    ];
+
+    const BUILD = [
+      { tone: 'blue', icon: 'file-text', title: 'AI Document Intelligence', text: 'Extract data, understand content and automate workflows.' },
+      { tone: 'green', icon: 'workflow', title: 'AI Workflow Automation', text: 'Automate repetitive business processes across systems.' },
+      { tone: 'cyan', icon: 'share-2', title: 'AI Agents', text: 'Agents that execute bounded business tasks with your data and tools.' },
+      { tone: 'violet', icon: 'shield-check', title: 'Enterprise Knowledge AI', text: 'Turn internal knowledge into trusted answers.' },
+      { tone: 'pink', icon: 'user-cog', title: 'AI Copilots', text: 'AI inside your employee workflows and applications.' },
+      { tone: 'orange', icon: 'bar-chart-3', title: 'AI Analytics', text: 'From data to insights and actions.' }
+    ];
+
+    const INDUSTRIES = [
+      { title: 'Healthcare', tone: 'blue', icon: 'stethoscope', photo: '1576091160399-112ba8d25d1d', text: 'AI automation, document intelligence and data platforms.' },
+      { title: 'Insurance', tone: 'green', icon: 'shield-check', photo: '1450101499163-c8848c66ca85', text: 'Claims, underwriting, compliance and automation.' },
+      { title: 'Technology &amp; SaaS', tone: 'cyan', icon: 'layers', photo: '1518770660439-4636190af475', text: 'Product engineering, AI features and data platforms.' },
+      { title: 'Professional Services', tone: 'orange', icon: 'briefcase', photo: '1556761175-5973dc0f32e7', text: 'AI automation for legal, finance, consulting and more.' }
+    ];
+
+    const WHY = [
+      { tone: 'red', icon: 'heart', title: 'Business-first', text: 'We start with the problem, not the model.' },
+      { tone: 'blue', icon: 'settings', title: 'Engineering depth', text: 'We build production software, not AI demos.' },
+      { tone: 'green', icon: 'sparkles', title: 'AI-native', text: 'Agents, RAG, automation, analytics and modern architecture.' },
+      { tone: 'blue', icon: 'shield', title: 'Enterprise-ready', text: 'Security, governance and observability.' },
+      { tone: 'orange', icon: 'trophy', title: 'Product mindset', text: 'We identify reusable capabilities that can evolve into products.' }
+    ];
+
+    const MVP_EXAMPLES = [
+      { title: 'AI Interview Preparation Platform', text: 'AI-powered mock interviews with real-time feedback.', tags: ['AI Agents', 'Web App', 'SaaS'], photo: '1551288049-bebda4e38f71' },
+      { title: 'Healthcare Document Automation', text: 'Extract, process and automate healthcare documents.', tags: ['Document AI', 'Workflow', 'Web App'], photo: '1581091226825-a6a2a5aee158' },
+      { title: 'RFP Response Assistant', text: 'Analyze RFPs and generate compliant responses.', tags: ['Gen AI', 'Enterprise Tool', 'SaaS'], photo: '1486312338219-ce68d2c6f44d' },
+      { title: 'Vendor Risk Intelligence', text: 'Monitor vendor risk and technology changes.', tags: ['Market Intel', 'Analytics', 'Web App'], photo: '1460925895917-afdab827c52f' },
+      { title: 'Internal Knowledge Assistant', text: 'Search and get answers from internal documents.', tags: ['Knowledge AI', 'AI Copilots', 'SaaS'], photo: '1504868584819-f8e8b4b6d7e3' }
+    ];
+
+    const FAQS = [
+      ['How long does it take to build an MVP?', 'Most MVPs ship in 4 – 12 weeks, depending on scope and AI complexity.'],
+      ['How much does an MVP cost?', 'MVP Starter begins from ₹2.5L, AI MVP from ₹4.5L and MVP → Scale from ₹6L.'],
+      ['What technologies do you use?', 'We use modern web, mobile, cloud and AI stacks, including LLMs, RAG and agents.'],
+      ['Do you provide post-launch support?', 'Yes. Ongoing support and continuous improvement are available after launch.']
+    ];
+
 
     const views = {};
 
+
     views.home = () => `
-      <section class="hero-dark text-white">
-        <div class="max-w-7xl mx-auto px-5 py-14 grid gap-10 lg:grid-cols-[1fr_1.1fr] items-center">
-          <div>
-            <span class="eyebrow !bg-white/10 !border-white/20 !text-white normal-case !tracking-normal">
-              ${ic('zap', 'w-3 h-3')} From Idea to Intelligence to Product
-            </span>
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-[1.1] mt-5">
-              Turn Business Ideas and Problems into <span class="grad-text-light">Working AI Solutions</span>
-            </h1>
-            <p class="text-sm text-white/80 mt-5 max-w-md leading-relaxed">
-              Validate with DataThick intelligence. Design, build and deploy with Inbuilt. From AI agents and automation to enterprise software and data platforms.
-            </p>
-            <div class="flex flex-wrap gap-3 mt-7">
-              ${btn('Validate an Idea', '#/validate')}
-              ${btn('Build an MVP', '#/mvp', 'light')}
-            </div>
-            <ul class="flex flex-wrap gap-x-6 gap-y-2 mt-7 text-xs text-white/80">
-              ${['Business-first approach', 'Enterprise-ready solutions', 'End-to-end from idea to scale'].map(x => `<li class="flex items-center gap-1.5">${ic('check', 'w-3.5 h-3.5')}${x}</li>`).join('')}
-            </ul>
-          </div>
-          <div class="relative">
-            <div class="hidden md:flex flex-wrap gap-2 justify-end mb-4">
-              ${['AI Agents', 'Automation', 'Enterprise Software', 'Data &amp; Analytics'].map(x => `<span class="glass text-[10px] font-semibold px-3 py-1.5">${x}</span>`).join('')}
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 items-center">
-              ${[['lightbulb', 'Your Idea or Problem'], ['bar-chart-3', 'Validate with DataThick Intelligence'], ['code-2', 'Build with Inbuilt'], ['rocket', 'Launch &amp; Scale']].map((s, i) => `
-                <div class="glass ${i == 2 ? 'on scale-105' : ''} p-4 text-center min-h-[120px] flex flex-col items-center justify-center gap-2">
-                  ${ic(s[0], 'w-6 h-6')}
-                  <span class="text-[11px] font-semibold leading-tight">${s[1]}</span>
-                </div>
-              `).join('')}
-            </div>
-          </div>
+  <section class="hero-dark text-white">
+    <div class="max-w-7xl mx-auto px-5 py-16 grid gap-12 lg:grid-cols-[1fr_1.1fr] items-center">
+      <div>
+        ${eyebrow('From Idea to Intelligence to Product', 'zap').replace('eyebrow', 'eyebrow eyebrow-dark eyebrow-plain')}
+        <h1 class="text-4xl md:text-[52px] font-extrabold leading-[1.1] tracking-tight mt-6">
+          Turn Business Ideas and Problems into
+          <span class="grad-text-light">Working AI Solutions</span>
+        </h1>
+        <p class="text-[15px] text-white/80 leading-relaxed mt-5 max-w-md">
+          Validate with DataThick intelligence. Design, build and deploy with Inbuilt.
+          From AI agents and automation to enterprise software and data platforms.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          ${button({ label: 'Validate an Idea', href: '#/validate' })}
+          ${button({ label: 'Build an MVP', href: '#/mvp', variant: 'light' })}
         </div>
-      </section>
+        ${heroChecks(['Business-first approach', 'Enterprise-ready solutions', 'End-to-end from idea to scale'], 'text-white/80')}
+      </div>
 
-      <section class="py-8 border-b border-[var(--line)]">
-        ${wrap(`
-          <p class="text-[10px] uppercase tracking-wider text-slate-500 mb-4">Technologies We Work With</p>
-          <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4 text-slate-800 font-bold">
-            ${['aws', 'Microsoft', 'Google Cloud', 'OpenAI', 'ANTHROPIC', 'MongoDB', 'PostgreSQL', 'docker', 'kubernetes'].map(x => `<span class="text-sm opacity-80 hover:opacity-100 transition">${x}</span>`).join('')}
-          </div>
-        `)}
-      </section>
+      <div>
+        <div class="hidden md:flex flex-wrap justify-end gap-2 mb-5">
+          ${['AI Agents', 'Automation', 'Enterprise Software', 'Data &amp; Analytics'].map(t =>
+      `<span class="glass text-[11px] font-semibold px-3 py-1.5">${t}</span>`).join('')}
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 items-stretch">
+          ${[
+        ['lightbulb', 'Your Idea<br>or Problem'],
+        ['bar-chart-3', 'Validate with DataThick Intelligence'],
+        ['code-2', 'Build<br>with Inbuilt'],
+        ['rocket', 'Launch<br>&amp; Scale']
+      ].map(([name, label], i) => `
+            <div class="glass flow-step ${i === 2 ? 'is-on' : ''}">
+              ${icon(name, 'w-6 h-6')}
+              <span class="text-xs font-semibold leading-snug">${label}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <section class="py-12">
-        ${wrap(`
-          <span class="eyebrow">What brings you here?</span>
-          <div class="flex flex-wrap justify-between items-start gap-4 mt-2 mb-6">
-            <h2 class="text-3xl font-extrabold">How can we help you?</h2>
-            <p class="text-sm italic text-indigo-600 text-right leading-snug" style="font-family:cursive">Different starting points.<br>Same destination.<br>Real business impact.</p>
+  <section class="border-b border-line py-8 bg-slate-50/50">
+    <div class="max-w-7xl mx-auto px-5">
+      <p class="text-[10px] uppercase tracking-[.14em] font-bold text-slate-400 mb-5">Technologies We Work With</p>
+      <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+        ${PARTNERS.map(p => `
+          <div class="partner-logo-wrap" title="${p.name}">
+            <img src="${p.src}" alt="${p.name} logo" class="partner-logo" loading="lazy">
+            <span class="partner-label">${p.name}</span>
           </div>
-          <div class="grid gap-5 md:grid-cols-3">
-            ${[['blue', 'target', 'I have a business problem', 'Explore how AI and automation can solve your business challenges.', 'Get an AI Opportunity Assessment', '#/services', 'bg-blue-50/60 text-blue-600'], ['violet', 'lightbulb', 'I have a product idea', 'Validate the opportunity and build a working MVP.', 'Idea Validation &amp; MVP', '#/validate', 'bg-violet-50/60 text-violet-600'], ['green', 'settings', 'I know what I want built', 'Turn your requirements into a production-ready solution.', 'Start an AI/Software Project', '#/mvp', 'bg-emerald-50/60 text-emerald-600']].map(c => `
-              <a href="${c[5]}" class="card hover p-6 ${c[6].split(' ')[0]} block">
-                ${tile(c[0], c[1])}
-                <h3 class="font-bold text-lg mt-4">${c[2]}</h3>
-                <p class="text-sm text-[var(--muted)] mt-1 mb-5">${c[3]}</p>
-                <span class="btn btn-outline ${c[0] == 'green' ? '!text-emerald-600 !border-emerald-300' : c[0] == 'violet' ? '!text-violet-600 !border-violet-300' : ''} text-[11px]">${c[4]} ${arrow}</span>
-              </a>
-            `).join('')}
-          </div>
-        `)}
-      </section>
+        `).join('')}
+      </div>
+    </div>
+  </section>
 
-      <section class="bg-[var(--soft)] py-12">
-        ${wrap(`
-          <div class="grid gap-8 lg:grid-cols-2 items-center">
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${eyebrow('What brings you here?')}
+      <div class="flex flex-wrap items-end justify-between gap-4 mt-3 mb-8">
+        <h2 class="text-3xl font-extrabold tracking-tight">How can we help you?</h2>
+        <p class="text-sm italic text-brand text-right leading-snug font-medium">
+          Different starting points.<br>Same destination.<br>Real business impact.
+        </p>
+      </div>
+
+      <div class="grid gap-5 md:grid-cols-3">
+        ${[
+        { tone: 'blue', bg: 'bg-blue-50/60', icon: 'target', title: 'I have a business problem', text: 'Explore how AI and automation can solve your business challenges.', cta: 'Get an AI Opportunity Assessment', href: '#/services', btn: 'btn-outline' },
+        { tone: 'violet', bg: 'bg-violet-50/60', icon: 'lightbulb', title: 'I have a product idea', text: 'Validate the opportunity and build a working MVP.', cta: 'Idea Validation &amp; MVP', href: '#/validate', btn: 'btn-outline-violet' },
+        { tone: 'green', bg: 'bg-emerald-50/60', icon: 'settings', title: 'I know what I want built', text: 'Turn your requirements into a production-ready solution.', cta: 'Start an AI/Software Project', href: '#/mvp', btn: 'btn-outline-green' }
+      ].map(c => `
+          <article class="card card-hover ${c.bg} p-6 flex flex-col">
+            ${tile(c.tone, c.icon)}
+            <h3 class="font-bold text-lg mt-4">${c.title}</h3>
+            <p class="text-sm text-muted leading-relaxed mt-1.5 mb-6">${c.text}</p>
+            <a href="${c.href}" class="btn ${c.btn} mt-auto self-start">${c.cta}${arrow}</a>
+          </article>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-soft py-14">
+    <div class="max-w-7xl mx-auto px-5 grid gap-10 lg:grid-cols-[1fr_1.1fr] items-center">
+      <div>
+        ${eyebrow('Powered by DataThick', 'database')}
+        <h2 class="text-4xl font-extrabold tracking-tight leading-tight mt-5">
+          Validate Before <span class="text-accent">You Build</span>
+        </h2>
+        <p class="text-[15px] text-muted leading-relaxed mt-4 max-w-md">
+          Not every idea deserves an MVP. Use DataThick intelligence to investigate market demand,
+          competition, technology signals and customer needs before investing in development.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-7">
+          ${button({ label: 'Explore DataThick', href: '#/validate', variant: 'dark' })}
+          ${button({ label: 'See a Sample Report', href: '#/validate', variant: 'light' })}
+        </div>
+      </div>
+      ${reportPanel()}
+    </div>
+  </section>
+
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'What We Build', subtitle: 'End-to-end AI, software and data solutions to solve real business problems.', link: 'Explore All Solutions', href: '#/services' })}
+      ${iconCards(BUILD, 'sm:grid-cols-2 lg:grid-cols-6', { link: true })}
+    </div>
+  </section>
+
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'From Idea to Production', subtitle: 'A proven, end-to-end process to take your idea from concept to a scalable AI product.', link: 'Learn About Our Process', href: '#/mvp' })}
+      ${steps([
+        { tone: 'blue', title: 'Validate', text: 'Market, customer, competition and technology validation with DataThick.' },
+        { tone: 'violet', title: 'Design', text: 'MVP, UX/UI and architecture.' },
+        { tone: 'green', title: 'Build', text: 'Working product with AI integration.' },
+        { tone: 'orange', title: 'Launch', text: 'Pilot, production deployment.' },
+        { tone: 'blue', title: 'Scale', text: 'AI operations, continuous improvement and productization.' }
+      ], 'sm:grid-cols-2 lg:grid-cols-5')}
+    </div>
+  </section>
+
+  <section class="bg-soft py-14">
+    <div class="max-w-7xl mx-auto px-5 grid gap-6 lg:grid-cols-[1.1fr_.9fr_.8fr] items-stretch">
+      <div>
+        <h2 class="text-2xl font-extrabold">Have a Product Idea?</h2>
+        <p class="text-sm text-muted leading-relaxed mt-2 mb-5">
+          You don't need a large engineering team to validate and build your idea. We help you turn
+          a business concept into a working MVP and beyond.
+        </p>
+        ${checkList([
+        'Idea validation with DataThick', 'AI integration', 'Product strategy &amp; UX/UI',
+        'MVP development', 'Scalable architecture', 'Pilot and production support'
+      ], 'text-accent', 'sm:grid-cols-2')}
+        <div class="mt-6">${button({ label: 'Build My MVP', href: '#/mvp' })}</div>
+      </div>
+
+      <div class="card p-5 flex flex-col">
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span>Your Idea</span>
+          <span class="chip bg-violet-100 text-violet-700">Description</span>
+        </div>
+        <div class="field text-slate-400 mt-4">Describe your idea...</div>
+        <div class="flex flex-wrap gap-1.5 my-4">
+          ${['AI for healthcare claims', 'Document processing', 'Internal knowledge assistant', 'Research intelligence']
+        .map(t => `<span class="chip bg-slate-100 text-slate-600">${t}</span>`).join('')}
+        </div>
+        <a href="#/validate" class="btn btn-primary w-full mt-auto">Generate Opportunity Analysis</a>
+      </div>
+
+      <div class="band-navy rounded-2xl text-white p-6 flex flex-col">
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="font-bold text-sm">For Startups &amp; Founders</h3>
+          <span class="chip bg-white/15 shrink-0">SPECIAL SUPPORT</span>
+        </div>
+        <div class="my-5">
+          ${checkList(['Fast MVP development', 'Cost-effective approach', 'Access to AI expertise', 'From concept to market', 'Ongoing support'], 'text-sky-300').replace('text-slate-700', 'text-white/90')}
+        </div>
+        <a href="#/services" class="btn btn-light w-full mt-auto">Let's Discuss Your Idea</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'Industries We Focus On', subtitle: 'Domain expertise combined with AI and engineering capabilities.', link: 'View All Industries', href: '#/services' })}
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        ${INDUSTRIES.map(item => `
+          <a href="#/services" class="card card-hover overflow-hidden flex flex-col">
+            <div class="photo h-40 relative">
+              <img src="${img(item.photo)}" alt="${item.title}" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()">
+              <div class="absolute inset-0 photo-fade"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center gap-2.5 text-white font-bold text-sm">
+                ${tile(item.tone, item.icon, 'tile-sm')}${item.title}
+              </div>
+            </div>
+            <div class="p-4 flex flex-col flex-1">
+              <p class="text-xs text-muted leading-relaxed">${item.text}</p>
+              <span class="text-link mt-auto pt-3">Learn More${arrow}</span>
+            </div>
+          </a>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-4">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'Why Companies Work with Inbuilt', subtitle: 'We combine business understanding, engineering depth and AI expertise to deliver real outcomes.' })}
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        ${WHY.map(w => `
+          <article class="card p-4 flex gap-3">
+            ${tile(w.tone, w.icon, 'shrink-0')}
             <div>
-              <span class="eyebrow">${ic('database', 'w-3 h-3')} Powered by DataThick</span>
-              <h2 class="text-4xl font-extrabold mt-4">Validate Before <span class="text-blue-600">You Build</span></h2>
-              <p class="text-sm text-[var(--muted)] mt-4 max-w-md leading-relaxed">Not every idea deserves an MVP. Use DataThick intelligence to investigate market demand, competition, technology signals and customer needs before investing in development.</p>
-              <div class="flex gap-3 mt-6">
-                ${btn('Explore DataThick', '#/validate', 'dark')}
-                ${btn('See a Sample Report', '#/validate', 'light')}
-              </div>
-              <div class="grid grid-cols-3 sm:grid-cols-6 gap-3 mt-8 text-center">
-                ${[['trending-up', 'Market Analysis', 'blue'], ['swords', 'Competitive Landscape', 'red'], ['users', 'Customer Signals', 'blue'], ['cpu', 'Technology Trends', 'green'], ['sparkles', 'AI Opportunity', 'cyan'], ['file-text', 'MVP Recommendation', 'violet']].map(x => `
-                  <div class="text-[10px] text-slate-600 leading-tight">
-                    ${tile(x[2], x[0], '!w-9 !h-9 mb-1')}
-                    <br>${x[1]}
-                  </div>
-                `).join('')}
-              </div>
+              <h3 class="font-bold text-[13px]">${w.title}</h3>
+              <p class="text-xs text-muted leading-relaxed mt-1">${w.text}</p>
             </div>
-            <div class="card p-4 grid sm:grid-cols-[150px_1fr] gap-4">
-              <div class="sm:col-span-2 flex justify-between text-xs font-bold">
-                <span>Opportunity Intelligence Report</span>
-                <span class="chip bg-violet-100 text-violet-700">AI-Powered Analysis</span>
-              </div>
-              <ul class="text-[11px] space-y-1">
-                ${['Executive Summary', 'Market Analysis', 'Competitive Landscape', 'Customer Insights', 'Technology Analysis', 'AI Opportunity', 'MVP Recommendation'].map((x, i) => `
-                  <li class="px-2 py-1.5 rounded ${i == 0 ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-600'}">${x}</li>
-                `).join('')}
-              </ul>
-              <div>
-                <div class="flex justify-between">
-                  <div>
-                    <div class="text-[10px] text-slate-500">Market Opportunity</div>
-                    <div class="flex items-end gap-1 h-16 mt-2">
-                      ${[20, 28, 36, 44, 54, 66].map(h => `<div class="bar w-4" style="height:${h}px"></div>`).join('')}
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <div class="text-xl font-extrabold">$12.5B</div>
-                    <div class="text-[9px] text-slate-500">Est. Market Size</div>
-                    <div class="text-emerald-600 font-bold text-sm mt-1">↑ 18%</div>
-                    <div class="text-[9px] text-slate-500">CAGR (2023–2030)</div>
-                  </div>
-                </div>
-                <div class="text-[11px] font-bold mt-3 mb-1">Key Insights</div>
-                <ul class="text-[10px] space-y-1 text-slate-600">
-                  ${checks(['Strong market demand', 'Growing AI adoption', 'Medium competition', 'High differentiation opportunity'])}
-                </ul>
-              </div>
-            </div>
-          </div>
-        `)}
-      </section>
+          </article>`).join('')}
+      </div>
+    </div>
+  </section>
 
-      <section class="py-12">
-        ${wrap(`
-          ${sec('What We Build', 'End-to-end AI, software and data solutions to solve real business problems.', 'Explore All Solutions', '#/services')}
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-            ${[['blue', 'file-text', 'AI Document Intelligence', 'Extract data, understand content and automate workflows.'], ['green', 'workflow', 'AI Workflow Automation', 'Automate repetitive business processes across systems.'], ['cyan', 'share-2', 'AI Agents', 'Agents that execute bounded business tasks with your data and tools.'], ['violet', 'shield-check', 'Enterprise Knowledge AI', 'Turn internal knowledge into trusted answers.'], ['pink', 'user-cog', 'AI Copilots', 'AI inside your employee workflows and applications.'], ['orange', 'bar-chart-3', 'AI Analytics', 'From data to insights and actions.']].map(c => `
-              <a href="#/services" class="card hover p-4 block">
-                ${tile(c[0], c[1])}
-                <h3 class="font-bold text-sm mt-3 leading-tight">${c[2]}</h3>
-                <p class="text-xs text-[var(--muted)] mt-1 mb-3">${c[3]}</p>
-                <span class="text-blue-700">${arrow}</span>
-              </a>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      <section class="py-8">
-        ${wrap(`
-          ${sec('From Idea to Production', 'A proven, end-to-end process to take your idea from concept to a scalable AI product.', 'Learn About Our Process', '#/mvp')}
-          ${steps([['Validate', 'Market, customer, competition and technology validation with DataThick.', '', 'blue'], ['Design', 'MVP, UX/UI and architecture.', '', 'violet'], ['Build', 'Working product with AI integration.', '', 'green'], ['Launch', 'Pilot, production deployment.', '', 'orange'], ['Scale', 'AI operations, continuous improvement and productization.', '', 'blue']], 5)}
-        `)}
-      </section>
-
-      <section class="py-10 bg-[var(--soft)]">
-        ${wrap(`
-          <div class="grid gap-6 lg:grid-cols-[1.1fr_.9fr_.8fr]">
-            <div>
-              <h2 class="text-2xl font-extrabold">Have a Product Idea?</h2>
-              <p class="text-sm text-[var(--muted)] mt-2 mb-4 leading-relaxed">You don't need a large engineering team to validate and build your idea. We help you turn a business concept into a working MVP and beyond.</p>
-              <ul class="grid grid-cols-2 gap-2 text-xs mb-5">
-                ${checks(['Idea validation with DataThick', 'AI integration', 'Product strategy &amp; UX/UI', 'MVP development', 'Scalable architecture', 'Pilot and production support'], 'text-blue-600')}               </ul>${btn('Build My MVP', '#/mvp')}
-            </div>
-            <div class="card p-4">
-              <div class="flex justify-between text-xs font-bold">
-                <span>Your Idea</span>
-                <span class="chip bg-violet-100 text-violet-700">Description</span>
-              </div>
-              <div class="field mt-3 text-slate-400">Describe your idea...</div>
-              <div class="flex flex-wrap gap-1.5 my-3">
-                ${['AI for healthcare claims', 'Document processing', 'Internal knowledge assistant', 'Research intelligence'].map(x => `<span class="chip bg-slate-100 text-slate-600">${x}</span>`).join('')}
-              </div>
-              <a href="#/validate" class="btn btn-primary btn-block">Generate Opportunity Analysis</a>
-            </div>
-            <div class="cta-band text-white rounded-2xl p-6">
-              <div class="flex justify-between">
-                <h3 class="font-bold text-sm">For Startups &amp; Founders</h3>
-                <span class="chip bg-white/15">SPECIAL SUPPORT</span>
-              </div>
-              <ul class="text-xs space-y-2 my-4 text-white/90">
-                ${checks(['Fast MVP development', 'Cost-effective approach', 'Access to AI expertise', 'From concept to market', 'Ongoing product support'], 'text-sky-300')}
-              </ul>
-              <a href="#/services" class="btn btn-light btn-block">Let's Discuss Your Idea</a>
-            </div>
-          </div>
-        `)}
-      </section>
-
-      <section class="py-12">
-        ${wrap(`
-          ${sec('Industries We Focus On', 'Domain expertise combined with AI and engineering capabilities.', 'View All Industries', '#/services')}
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            ${[['Healthcare', 'stethoscope', 'AI automation, document intelligence and data platforms.', 'photo-1576091160399-112ba8d25d1d', 'blue'], ['Insurance', 'shield-check', 'Claims, underwriting, compliance and automation.', 'photo-1450101499163-c8848c66ca85', 'green'], ['Technology &amp; SaaS', 'layers', 'Product engineering, AI features and data platforms.', 'photo-1518770660439-4636190af475', 'cyan'], ['Professional Services', 'briefcase', 'AI automation for legal, finance, consulting and more.', 'photo-1556761175-5973dc0f32e7', 'orange']].map(c => `
-              <a href="#/services" class="card hover overflow-hidden block">
-                <div class="h-36 bg-cover bg-center relative" style="background-image:linear-gradient(180deg,transparent 30%,rgba(10,18,53,.85)),url('https://images.unsplash.com/${c[3]}?auto=format&fit=crop&w=600&q=70')">
-                  <div class="absolute bottom-3 left-3 flex items-center gap-2 text-white font-bold text-sm">
-                    ${tile(c[4], c[1], '!w-8 !h-8')}
-                    ${c[0]}
-                  </div>
-                </div>
-                <div class="p-3">
-                  <p class="text-xs text-[var(--muted)]">${c[2]}</p>
-                  <span class="text-xs font-bold text-blue-700 mt-2 inline-flex items-center gap-1">Learn More ${arrow}</span>
-                </div>
-              </a>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      <section class="py-8">
-        ${wrap(`
-          ${sec('Why Companies Work with Inbuilt', 'We combine business understanding, engineering depth and AI expertise to deliver real outcomes.')}
-          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            ${[['red', 'heart', 'Business-first', 'We start with the problem, not the model.'], ['blue', 'settings', 'Engineering depth', 'We build production software, not AI demos.'], ['green', 'sparkles', 'AI-native', 'Agents, RAG, automation, analytics and modern architecture.'], ['blue', 'shield', 'Enterprise-ready', 'Security, governance and observability.'], ['orange', 'trophy', 'Product mindset', 'We identify reusable capabilities that can evolve into products.']].map(c => `
-              <div class="card p-4 flex gap-3">
-                ${tile(c[0], c[1], 'shrink-0')}
-                <div>
-                  <h3 class="font-bold text-xs">${c[2]}</h3>
-                  <p class="text-[11px] text-[var(--muted)] mt-1">${c[3]}</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      ${ctaBand('Ready to build?', 'Have an idea? Let\'s turn it into a working product.', 'Validate with DataThick. Build with Inbuilt. From concept to production and beyond.', [['100+', 'Ideas Evaluated'], ['50+', 'MVPs Built'], ['30+', 'Clients Supported'], ['10+', 'Industries Served']])}
-    `;
+  ${ctaBand({
+          label: 'Ready to build?',
+          title: 'Have an idea? Let\'s turn it into a working product.',
+          text: 'Validate with DataThick. Build with Inbuilt. From concept to production and beyond.',
+          stats: [['100+', 'Ideas Evaluated'], ['50+', 'MVPs Built'], ['30+', 'Clients Supported'], ['10+', 'Industries Served']]
+        })}
+`;
 
     views.validate = () => `
-      <section class="hero-light">
-        <div class="max-w-7xl mx-auto px-5 py-10 grid gap-8 lg:grid-cols-2 items-center">
-          <div>
-            ${crumb('Validate an Idea')}
-            <span class="eyebrow">${ic('database', 'w-3 h-3')} Powered by DataThick</span>
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mt-4">Validate Your Idea <span class="grad-text">Before You Build</span></h1>
-            <p class="text-sm text-slate-700 mt-5 max-w-lg leading-relaxed">Use DataThick intelligence to investigate market demand, competition, customer needs, technology trends and AI opportunities. Get a data-driven report to decide if your idea should become an MVP.</p>
-            <div class="flex flex-wrap gap-3 mt-6">
-              ${btn('Validate My Idea', '#form')}
-              ${btn('See a Sample Report', '#sample', 'light')}
-            </div>
-            ${tick(['Objective &amp; data-driven', 'Real market insights', 'Actionable recommendations'])}
-          </div>
-          <div class="grid grid-cols-3 gap-3 items-center">
-            ${[['Market Analysis', 'bar-chart-3'], ['Customer Signals', 'users'], ['Technology Analysis', 'code-2']].map(x => `
-              <div class="card p-3 text-xs font-semibold flex items-center gap-2">
-                ${tile('blue', x[1], '!w-8 !h-8')}${x[0]}
-              </div>
-            `).join('')}
-            <div class="card p-4 text-center bg-blue-600 !text-white col-start-2 row-start-1 row-span-3 flex flex-col items-center justify-center gap-2 !border-blue-400">
-              ${ic('lightbulb', 'w-10 h-10')}
-              <span class="text-sm font-bold">Idea Validation</span>
-            </div>
-          </div>
+  <section class="hero-light">
+    <div class="max-w-7xl mx-auto px-5 py-12 grid gap-10 lg:grid-cols-2 items-center">
+      <div>
+        ${breadcrumb('Validate an Idea')}
+        ${eyebrow('Powered by DataThick', 'database')}
+        <h1 class="text-4xl md:text-[52px] font-extrabold leading-[1.1] tracking-tight mt-5">
+          Validate Your Idea <span class="grad-text">Before You Build</span>
+        </h1>
+        <p class="text-[15px] text-slate-700 leading-relaxed mt-5 max-w-lg">
+          Use DataThick intelligence to investigate market demand, competition, customer needs,
+          technology trends and AI opportunities. Get a data-driven report to decide if your idea
+          should become an MVP.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          ${button({ label: 'Validate My Idea', scroll: 'validate-form' })}
+          ${button({ label: 'See a Sample Report', scroll: 'sample', variant: 'light' })}
         </div>
-      </section>
+        ${heroChecks(['Objective &amp; data-driven', 'Real market insights', 'Actionable recommendations'])}
+      </div>
 
-      <section class="py-10">
-        ${wrap(`
-          ${sec('What You\'ll Get', 'A comprehensive opportunity validation report covering all key aspects.')}
-          <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-7">
-            ${[['blue', 'file-text', 'Executive Summary', 'Key findings and go/no-go recommendation.'], ['blue', 'bar-chart-3', 'Market Analysis', 'Market size, growth, demand and trends.'], ['violet', 'users', 'Competitive Landscape', 'Existing solutions, competitors and gaps.'], ['green', 'target', 'Customer Insights', 'Customer pain points, needs and sentiment.'], ['blue', 'settings', 'Technology Analysis', 'Technology feasibility, modern stack and AI potential.'], ['green', 'coins', 'Business Model', 'Monetization options and pricing analysis.'], ['violet', 'file-text', 'MVP Recommendation', 'Recommended scope, features and roadmap.']].map(c => `
-              <div class="card hover p-4">
-                ${tile(c[0], c[1])}
-                <h3 class="font-bold text-xs mt-3">${c[2]}</h3>
-                <p class="text-[11px] text-[var(--muted)] mt-1">${c[3]}</p>
-              </div>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      <section class="py-6" id="form">
-        ${wrap(`
-          <div class="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
-            ${form({ id: 'v', title: 'Tell us about your idea', sub: 'Share a few details and we\'ll generate a comprehensive validation report using DataThick intelligence.', ph: 'Describe your idea, target users, main problem it solves...', last: 'Target Market', lastPh: 'Select market', btn: 'Validate My Idea' })}
-            <div class="card p-5" id="sample">
-              <div class="flex justify-between items-center mb-4">
-                <h2 class="font-extrabold text-lg">Sample Opportunity Report</h2>
-                <a href="#sample" class="chip bg-violet-100 text-violet-700">VIEW FULL SAMPLE →</a>
-              </div>
-              <div class="grid sm:grid-cols-[140px_1fr] gap-4">
-                <ul class="text-[11px] space-y-1">
-                  ${['Executive Summary', 'Market Analysis', 'Competitive Landscape', 'Customer Insights', 'Technology Analysis', 'AI Opportunity', 'MVP Recommendation', 'Risks &amp; Considerations', 'Appendix &amp; Sources'].map((x, i) => `
-                    <li class="px-2 py-1.5 rounded ${i == 0 ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-600'}">${x}</li>
-                  `).join('')}
-                </ul>
-                <div>
-                  <div class="flex justify-between">
-                    <h3 class="font-bold text-sm">AI-Powered Medical Claims Automation</h3>
-                    <span class="chip bg-emerald-100 text-emerald-700">High Opportunity</span>
-                  </div>
-                  <p class="text-[9px] text-slate-400 mb-3">Generated on Oct 1, 2026</p>
-                  <div class="grid grid-cols-3 gap-2 mb-4">
-                    ${[['$12.5B', 'Est. Market Size'], ['18%', 'CAGR (2024-2030)'], ['High', 'Opportunity Score']].map(x => `
-                      <div class="border border-[var(--line)] rounded-lg p-2">
-                        <div class="font-extrabold text-sm">${x[0]}</div>
-                        <div class="text-[9px] text-slate-500">${x[1]}</div>
-                      </div>
-                    `).join('')}
-                  </div>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div>
-                      <div class="text-[11px] font-bold">Market Opportunity</div>
-                      <div class="flex items-end gap-1.5 h-20 mt-2">
-                        ${[20, 28, 36, 44, 54, 66].map(h => `<div class="bar flex-1" style="height:${h}px"></div>`).join('')}
-                      </div>
-                    </div>
-                    <p class="text-[10px] text-slate-500 leading-relaxed">Growing demand for automation in healthcare claims processing driven by cost pressure, regulatory changes and AI adoption.</p>
-                  </div>
-                  <div class="grid grid-cols-2 gap-4 mt-4">
-                    <div class="flex items-center gap-3">
-                      <div class="w-16 h-16 rounded-full shrink-0" style="background:conic-gradient(#6c5ce7 0 35%,#8b7cf6 0 60%,#14b8a6 0 80%,#2dd4bf 0)">
-                        <div class="w-8 h-8 bg-white rounded-full m-4"></div>
-                      </div>
-                      <ul class="text-[9px] text-slate-600">
-                        <li>Direct Competitors 35%</li>
-                        <li>Indirect Competitors 25%</li>
-                        <li>Emerging Startups 20%</li>
-                        <li>Market Gap 20%</li>
-                      </ul>
-                    </div>
-                    <ul class="text-[10px] space-y-1 text-slate-600">
-                      <li class="font-bold text-[11px]">Key Insights</li>
-                      ${checks(['Strong market demand', 'Medium competition', 'High AI leverage', 'Clear differentiation opportunity'])}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `)}
-      </section>
-
-      <section class="py-10">
-        ${wrap(`
-          ${sec('Our Validation Process', 'A structured, data-driven approach to analyze your idea using DataThick intelligence.')}${steps([['Understand', 'We analyze your idea, target market and goals.', '', 'blue'], ['Research', 'DataThick collects and analyzes market, customer, competition and technology data.', '', 'violet'], ['Analyze', 'Our AI models identify opportunities, risks and differentiation areas.', '', 'green'], ['Generate Report', 'You receive a comprehensive opportunity validation report with actionable insights.', '', 'orange'], ['Next Steps', 'If validated, you can build your MVP with Inbuilt.', '', 'blue']], 5)}
-        `)}
-      </section>
-
-      <section class="pb-6">
-        ${wrap(`
-          <div class="grid gap-4 lg:grid-cols-2">
-            <div class="card p-5 flex gap-4">
-              ${tile('blue', 'users', '!w-12 !h-12 shrink-0')}
-              <div>
-                <h3 class="font-bold">Who is this for?</h3>
-                <ul class="grid sm:grid-cols-2 gap-2 text-xs mt-3">
-                  ${checks(['Founders with a product idea', 'Startups looking to validate the market', 'Businesses exploring new opportunities', 'Innovation teams in enterprises', 'Innovation teams evaluating ideas', 'Investors evaluating ideas', 'Anyone who wants data-driven insights before investing in development'].slice(0, 6), 'text-blue-600')}
-                </ul>
-              </div>
-            </div>
-            <div class="card p-5 flex gap-4">
-              ${tile('violet', 'lightbulb', '!w-12 !h-12 shrink-0')}
-              <div>
-                <h3 class="font-bold">Example Ideas We Can Analyze</h3>
-                <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-xs mt-3 text-slate-700">
-                  ${['AI tool for automating insurance claims', 'Healthcare document processing platform', 'AI interview preparation app', 'B2B vendor risk monitoring platform', 'AI-powered research intelligence platform', 'Internal knowledge assistant for enterprises', 'AI-driven resume builder', 'Custom industry-specific AI solution'].map(x => `<li><a href="#form" class="hover:text-[var(--primary)] text-blue-700">→</a> ${x}</li>`).join('')}
-                </ul>
-              </div>
-            </div>
-          </div>
-        `)}
-      </section>
-
-      ${ctaBand('Arrive at a smarter decision', 'Validate with DataThick. Build with Inbuilt.', 'Turn your idea into a data-backed opportunity and then into a working product.', null)}
-    `;
-
-    views.mvp = () => `
-      <section class="hero-light">
-        <div class="max-w-7xl mx-auto px-5 py-10 grid gap-8 lg:grid-cols-2 items-center">
-          <div>
-            ${crumb('Build an MVP')}
-            <span class="eyebrow">${ic('rocket', 'w-3 h-3')} Build with confidence</span>
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mt-4">Turn Your Idea Into a <span class="grad-text">Working AI Product</span></h1>
-            <p class="text-sm text-slate-700 mt-5 max-w-md leading-relaxed">We help you take your concept from idea to a market-ready MVP. From strategy and design to development and launch — with AI at the core.</p>
-            <div class="flex flex-wrap gap-3 mt-6">
-              ${btn('Build My MVP', '#form')}
-              ${btn('Talk to an Expert', '#/services', 'light')}
-            </div>
-            ${tick(['Fast time to market', 'AI-powered solutions', 'End-to-end support'])}
-          </div>
-          <div class="relative">
-            <div class="rounded-xl bg-[#0b1437] p-4 text-white shadow-2xl">
-              <div class="flex justify-between text-xs font-bold mb-3">
-                <span>INBUILT</span>
-                <span>MVP Development</span>
-                <span class="chip bg-violet-500">Deploy</span>
-              </div>
-              <div class="grid grid-cols-4 gap-2 text-center">
-                ${[['68%', 'Total Progress'], ['12/18', 'Features'], ['3/4', 'Sprint'], ['2 Weeks', 'ETA']].map(x => `
-                  <div class="bg-white/10 rounded p-2">
-                    <div class="font-bold text-sm">${x[0]}</div>
-                    <div class="text-[9px] text-white/60">${x[1]}</div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mt-3">
-              ${['Modern Architecture', 'AI Integration', 'Scalable &amp; Secure', 'Rapid Development', 'Production Ready'].map(x => `<span class="card px-3 py-1.5 text-[10px] font-semibold">${x}</span>`).join('')}
-            </div>
-          </div>
+      <div class="grid grid-cols-3 gap-3 items-center">
+        <div class="space-y-3">
+          ${[['bar-chart-3', 'Market Analysis'], ['users', 'Customer Signals'], ['code-2', 'Technology Analysis']].map(([n, l]) => `
+            <div class="card p-3 flex items-center gap-2.5 text-xs font-semibold">${tile('blue', n, 'tile-sm')}${l}</div>`).join('')}
         </div>
-      </section>
+        <div class="band-blue rounded-2xl text-white p-5 text-center flex flex-col items-center justify-center gap-2 min-h-[160px]">
+          ${icon('lightbulb', 'w-10 h-10')}
+          <span class="text-sm font-bold">Idea Validation</span>
+        </div>
+        <div class="space-y-3">
+          ${[['pie-chart', 'Competitive Landscape'], ['brain', 'AI Opportunity'], ['file-text', 'MVP Recommendation']].map(([n, l]) => `
+            <div class="card p-3 flex items-center gap-2.5 text-xs font-semibold">${tile('violet', n, 'tile-sm')}${l}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <section class="py-10">
-        ${wrap(`
-          ${sec('Our MVP Development Process', 'A proven, structured approach from idea to a working product.', 'Learn More About Our Process', '#/services')}
-          ${steps([['Discovery &amp; Validation', 'Understand your idea, goals, target users and technical feasibility.', '', 'blue'], ['Product Strategy', 'Define scope, features, business model and roadmap.', '', 'violet'], ['UI/UX Design', 'Design a modern, user-friendly product experience.', '', 'green'], ['MVP Development', 'Build with AI integration and modern architecture.', '', 'orange'], ['Testing &amp; Launch', 'Deploy, validate with users and iterate.', '', 'pink'], ['Scale to Production', 'Add advanced features and scale.', '', 'blue']], 6)}
-        `)}
-      </section>
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'What You\'ll Get', subtitle: 'A comprehensive opportunity validation report covering all key aspects.' })}
+      ${iconCards([
+      { tone: 'blue', icon: 'file-text', title: 'Executive Summary', text: 'Key findings and go/no-go recommendation.' },
+      { tone: 'blue', icon: 'bar-chart-3', title: 'Market Analysis', text: 'Market size, growth, demand and trends.' },
+      { tone: 'violet', icon: 'users', title: 'Competitive Landscape', text: 'Existing solutions, competitors and gaps.' },
+      { tone: 'green', icon: 'target', title: 'Customer Insights', text: 'Customer pain points, needs and sentiment.' },
+      { tone: 'blue', icon: 'settings', title: 'Technology Analysis', text: 'Technology feasibility, modern stack and AI potential.' },
+      { tone: 'green', icon: 'coins', title: 'Business Model', text: 'Monetization options and pricing analysis.' },
+      { tone: 'violet', icon: 'file-text', title: 'MVP Recommendation', text: 'Recommended scope, features and roadmap.' }
+    ], 'sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7')}
+    </div>
+  </section>
 
-      <section class="py-6" id="form">
-        ${wrap(`
-          <div class="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
-            ${form({ id: 'm', step: 1, title: 'Get Started with Your MVP', sub: 'Share a few details and we\'ll prepare a tailored MVP plan for you.', ph: 'Describe your idea, target users, key features, and the main problem it solves...', last: 'Target Users', lastPh: 'Select target users', btn: 'Next: Define Requirements' })}
-            <div class="rounded-2xl bg-slate-50 border border-[var(--line)] p-6">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h2 class="text-2xl font-extrabold">What You Get</h2>
-                  <p class="text-sm text-[var(--muted)] mt-1">A complete MVP package to turn your idea into a real product.</p>
-                </div>
-                <a href="#/services" class="chip bg-blue-50 text-blue-700">View Detailed Deliverables →</a>
-              </div>
-              <div class="grid sm:grid-cols-3 gap-3 mt-5">
-                ${[['blue', 'file-text', 'Product Strategy &amp; PRD', 'Detailed product strategy, feature set and technical roadmap.'], ['violet', 'layout', 'UI/UX Design', 'Modern, responsive and user-friendly design.'], ['green', 'sparkles', 'AI Integration', 'Integration of LLMs, AI agents, RAG, and domain-specific AI capabilities.'], ['blue', 'code-2', 'Full Stack Development', 'Web, mobile or desktop application development.'], ['pink', 'cloud', 'Testing &amp; Deployment', 'QA, deployment and production setup.'], ['green', 'headphones', 'Ongoing Support', 'Post-launch support and continuous improvement.']].map(c => `
-                  <div class="card hover p-4">
-                    ${tile(c[0], c[1])}
-                    <h3 class="font-bold text-xs mt-3">${c[2]}</h3>
-                    <p class="text-[11px] text-[var(--muted)] mt-1">${c[3]}</p>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `)}
-      </section>
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5 grid gap-6 lg:grid-cols-[.9fr_1.1fr] items-start">
+      <div id="validate-form">
+        ${ideaForm({
+      id: 'validate',
+      title: 'Tell us about your idea',
+      subtitle: 'Share a few details and we\'ll generate a comprehensive validation report using DataThick intelligence.',
+      placeholder: 'Describe your idea, target users, main problem it solves...',
+      lastLabel: 'Target Market',
+      lastPlaceholder: 'Select market',
+      lastOptions: ['B2B', 'B2C', 'Enterprise'],
+      submit: 'Validate My Idea'
+    })}
+      </div>
+      ${reportPanel()}
+    </div>
+  </section>
 
-      <section class="py-10">
-        ${wrap(`
-          ${sec('Example MVPs We Can Build', 'Real-world inspired examples across industries.', 'View All Examples', '#/mvp')}
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            ${[['AI Interview Preparation Platform', 'AI-powered mock interviews with real-time feedback.', ['AI Agents', 'Web App', 'SaaS']], ['Healthcare Document Automation', 'Extract, process and automate healthcare documents.', ['Document AI', 'Workflow', 'Web App']], ['RFP Response Assistant', 'Analyze RFPs and generate compliant responses.', ['Gen AI', 'Enterprise Tool', 'SaaS']], ['Vendor Risk Intelligence', 'Monitor vendor risk and technology changes.', ['Market Intel', 'Analytics', 'Web App']], ['Internal Knowledge Assistant', 'Search and get answers from internal documents.', ['Knowledge AI', 'AI Copilots', 'SaaS']]].map((c, i) => `
-              <a href="#form" class="card hover overflow-hidden block">
-                <div class="h-28 bg-gradient-to-br from-[#0b1437] to-[#2b3a8c] grid place-items-center text-white/70">
-                  ${ic('layout-dashboard', 'w-8 h-8')}
-                </div>
-                <div class="p-3">
-                  <h3 class="font-bold text-xs">${c[0]}</h3>
-                  <div class="flex flex-wrap gap-1 my-2">
-                    ${c[2].map((t, j) => `<span class="chip ${['bg-pink-50 text-pink-600', 'bg-violet-50 text-violet-600', 'bg-blue-50 text-blue-600'][j]}">${t}</span>`).join('')}
-                  </div>
-                  <p class="text-[11px] text-[var(--muted)]">${c[1]}</p>
-                </div>
-              </a>
-            `).join('')}
-          </div>
-        `)}
-      </section>
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'Our Validation Process', subtitle: 'A structured, data-driven approach to analyze your idea using DataThick intelligence.' })}
+      ${steps([
+      { tone: 'blue', title: 'Understand', text: 'We analyze your idea, target market and goals.' },
+      { tone: 'violet', title: 'Research', text: 'DataThick collects and analyzes market, customer, competition and technology data.' },
+      { tone: 'green', title: 'Analyze', text: 'Our AI models identify opportunities, risks and differentiation areas.' },
+      { tone: 'orange', title: 'Generate Report', text: 'You receive a comprehensive opportunity validation report with actionable insights.' },
+      { tone: 'blue', title: 'Next Steps', text: 'If validated, you can build your MVP with Inbuilt.' }
+    ], 'sm:grid-cols-2 lg:grid-cols-5')}
+    </div>
+  </section>
 
-      <section class="py-6">
-        ${wrap(`
-          <div class="grid gap-8 lg:grid-cols-2">
-            <div>
-              ${sec('Engagement Models', 'Flexible options based on your needs.', 'View Pricing Guide', '#/services')}
-              <div class="grid sm:grid-cols-3 gap-3">
-                ${[['red', 'rocket', 'MVP Package', ['Defined scope', 'Fixed milestone pricing', 'Working MVP in 4–12 weeks']], ['blue', 'users', 'Dedicated Team', ['For complex products', 'Flexible engagement', 'Scale as per needs']], ['orange', 'star', 'End-to-End Product', ['MVP to production', 'Ongoing support', 'Productization &amp; scale']]].map(c => `
-                  <div class="card p-4">
-                    <div class="flex items-center gap-2 font-bold text-xs">
-                      ${tile(c[0], c[1], '!w-7 !h-7')}
-                      ${c[2]}
-                    </div>
-                    <ul class="text-[11px] space-y-1.5 my-3 text-slate-600">
-                      ${checks(c[3], 'text-blue-600')}
-                    </ul>
-                    <a href="#/services" class="btn btn-outline btn-block !py-1.5 text-[11px]">View Details ${arrow}</a>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-            <div>
-              <h2 class="text-2xl font-extrabold">Why Build with Inbuilt?</h2>
-              <p class="text-sm text-[var(--muted)] mt-1 mb-5">More than development — a true product partner.</p>
-              <div class="grid sm:grid-cols-2 gap-4">
-                ${[['red', 'target', 'Business-first approach', 'We focus on your business goals, not just technology.'], ['blue', 'cpu', 'AI-native development', 'Modern AI stack and best practices.'], ['blue', 'briefcase', 'Domain expertise', 'Healthcare, insurance, SaaS and more.'], ['orange', 'trophy', 'Product mindset', 'We build reusable capabilities that can evolve into products.']].map(c => `
-                  <div class="flex gap-3">
-                    ${tile(c[0], c[1], 'shrink-0')}
-                    <div>
-                      <h3 class="font-bold text-xs">${c[2]}</h3>
-                      <p class="text-[11px] text-[var(--muted)] mt-1">${c[3]}</p>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `)}
-      </section>
-
-      <section class="mtn text-white rounded-2xl mx-5 max-w-7xl xl:mx-auto my-12 p-8 md:p-10 grid gap-8 lg:grid-cols-[1.2fr_1fr] items-center">
+  <section class="pb-4">
+    <div class="max-w-7xl mx-auto px-5 grid gap-5 lg:grid-cols-2">
+      <article class="card p-6 flex gap-5">
+        ${tile('blue', 'users', 'tile-lg shrink-0')}
         <div>
-          <span class="eyebrow !bg-white/10 !border-white/20 !text-white">${ic('rocket', 'w-3 h-3')} Ready to build?</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold mt-3">Let's turn your idea into a working MVP.</h2>
-          <p class="text-sm text-white/80 mt-2 mb-6">Get a tailored plan, timeline and estimate from our experts.</p>
-          <div class="flex flex-wrap gap-3">
-            ${btn('Build My MVP', '#form')}
-            ${btn('Talk to Our Team', '#/services', 'light')}
+          <h3 class="font-bold">Who is this for?</h3>
+          <div class="mt-4">
+            ${checkList([
+      'Founders with a product idea', 'Startups looking to validate the market',
+      'Businesses exploring new opportunities', 'Innovation teams in enterprises',
+      'Investors evaluating ideas', 'Anyone who wants data-driven insights before investing in development'
+    ], 'text-accent', 'sm:grid-cols-2')}
           </div>
         </div>
-        <div class="grid grid-cols-4 gap-2 text-center">
-          ${[['50+', 'MVPs Delivered'], ['30+', 'Clients Supported'], ['10+', 'Industries Served'], ['90%', 'Projects to Production']].map(s => `
-            <div class="glass py-4">
-              <div class="text-xl font-extrabold">${s[0]}</div>
-              <div class="text-[10px] text-white/70 mt-1">${s[1]}</div>
-            </div>
-          `).join('')}
-        </div>
-      </section>
-    `;
+      </article>
 
-    views.services = () => `
-      <section class="hero-light">
-        <div class="max-w-7xl mx-auto px-5 py-12 grid gap-8 lg:grid-cols-2 items-center">
-          <div>
-            <div class="text-[11px] font-bold tracking-wider text-slate-600 uppercase mb-3">Our Services</div>
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">From idea to impact with <span class="text-blue-600">AI-powered product engineering.</span></h1>
-            <p class="text-sm text-slate-700 mt-5 max-w-md leading-relaxed">Whether you're validating a new idea, building an AI-powered product, or scaling an existing platform, Inbuilt AI provides the right expertise, technology and process to bring your vision to life.</p>
-            <div class="flex flex-wrap gap-3 mt-6">
-              ${btn('Build My MVP', '#/mvp')}
-              <a href="#cta" class="btn btn-light">${ic('calendar', 'w-3.5 h-3.5')} Schedule a Call</a>
-            </div>
-            <ul class="flex flex-wrap gap-6 mt-6 text-xs font-medium">
-              ${[['zap', 'Faster delivery'], ['wallet', 'Cost efficient'], ['headphones', 'End-to-end support']].map(x => `
-                <li class="flex items-center gap-2">
-                  ${tile('green', x[0], '!w-6 !h-6 !rounded-md')}${x[1]}
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-          <div class="card p-4 bg-[#0e1740] text-white">
-            <div class="text-sm font-bold mb-4">Your Product Journey</div>
-            <div class="flex justify-between">
-              ${['Discover', 'Design', 'Build', 'Test', 'Deploy'].map((x, i) => `
-                <div class="text-center text-[10px]">
-                  <span class="grid place-items-center w-8 h-8 rounded-full mx-auto mb-1 ${i == 4 ? 'bg-violet-500' : 'bg-emerald-500'}">
-                    ${ic(i == 4 ? 'rocket' : 'check', 'w-4 h-4')}                   </span>${x}
-                </div>
-              `).join('')}
-            </div>
-            <div class="grid grid-cols-3 gap-2 mt-5 text-center">
-              ${[['12', 'Features'], ['6 Weeks', 'Delivery Time'], ['40%', 'Lower Cost']].map(x => `
-                <div class="bg-white/10 rounded p-2">
-                  <div class="font-extrabold">${x[0]}</div>
-                  <div class="text-[9px] text-white/60">${x[1]}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="py-10">
-        ${wrap(`
-          <div class="flex flex-wrap justify-between items-end gap-4 mb-6">
-            <div>
-              <div class="text-[11px] font-bold tracking-wider text-slate-600 uppercase">Our Core Services</div>
-              <h2 class="text-3xl font-extrabold mt-1">Choose the right service for your journey.</h2>
-            </div>
-            <p class="text-sm text-[var(--muted)] max-w-sm">We offer flexible, outcome-driven services designed for founders, startups and businesses at every stage of product development.</p>
-          </div>
-          <div class="grid gap-5 md:grid-cols-3">
-            ${[['violet', 'box', 'MVP Starter', 'From ₹2.5L', 'Turn your idea into a working MVP.', ['Product discovery &amp; requirements', 'UI/UX design (web / mobile)', 'Backend, database &amp; APIs', 'Deployment &amp; basic analytics', '4 – 8 weeks delivery'], 'Build My MVP', 'btn-primary', 'text-blue-600'], ['blue', 'brain', 'AI MVP', 'From ₹4.5L', 'Build AI-powered products and agents.', ['AI/ML integration (LLM, RAG, Agents)', 'AI workflow automation', 'Modern web &amp; mobile applications', 'Scalable architecture', '6 – 12 weeks delivery'], 'Build My AI MVP', '!bg-blue-600 text-white', 'text-blue-600'], ['green', 'bar-chart-3', 'MVP → Scale', 'From ₹6L', 'Make your product production-ready.', ['Architecture review &amp; optimization', 'Performance &amp; security', 'Cloud infrastructure &amp; CI/CD', 'Monitoring &amp; observability', 'Ongoing support &amp; new features'], 'Scale My Product', '!bg-emerald-600 text-white', 'text-blue-600']].map(c => `
-              <div class="card hover p-6">
-                <div class="flex justify-between">
-                  ${tile(c[0], c[1], '!w-12 !h-12')}
-                  <span class="chip bg-violet-100 text-violet-700 h-fit">${c[3]}</span>
-                </div>
-                <h3 class="font-bold text-lg mt-4">${c[2]}</h3>
-                <p class="text-sm text-[var(--muted)] mb-4">${c[4]}</p>
-                <ul class="text-xs space-y-2 mb-6">
-                  ${checks(c[5], c[8])}
-                </ul>
-                <a href="#/mvp" class="btn ${c[7]} btn-block !py-3">${c[6]} ${arrow}</a>
-              </div>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      <section class="py-8">
-        ${wrap(`
-          <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr] items-center">
-            <div>
-              <div class="text-[11px] font-bold tracking-wider text-slate-600 uppercase">Why Choose Inbuilt AI</div>
-              <h2 class="text-3xl font-extrabold mt-1">A better way to build modern products.</h2>
-              <p class="text-sm text-[var(--muted)] mt-3 mb-5 leading-relaxed">We combine AI acceleration with experienced product engineers to deliver high-quality products faster, at lower cost and with reduced risk.</p>
-              <a href="#cta" class="btn !bg-blue-600 text-white">Let's build together ${arrow}</a>
-            </div>
-            <div class="grid sm:grid-cols-3 gap-3">
-              ${[['blue', 'zap', 'AI-Accelerated Development', 'Leverage AI tools and automation to speed up development cycles.'], ['blue', 'users', 'Experienced Engineering Team', 'Skilled product engineers with real-world experience across industries.'], ['red', 'target', 'Product-Focused Approach', 'We build what matters for your business, not just code.'], ['violet', 'layers', 'Modern Technology', 'Scalable, secure and future-ready architecture.'], ['blue', 'file-text', 'Transparent Process', 'Clear timelines, regular updates and collaboration.'], ['green', 'headphones', 'Ongoing Support', 'Post-launch support and continuous improvement.']].map(c => `
-                <div class="card p-4 flex gap-3">
-                  ${tile(c[0], c[1], 'shrink-0')}
-                  <div>
-                    <h3 class="font-bold text-[11px] leading-tight">${c[2]}</h3>
-                    <p class="text-[10px] text-[var(--muted)] mt-1">${c[3]}</p>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `)}
-      </section>
-
-      <section class="py-8">
-        ${wrap(`
-          <div class="text-[11px] font-bold tracking-wider text-slate-600 uppercase">Our Process</div>
-          <h2 class="text-3xl font-extrabold mt-1 mb-6">A clear and proven journey from idea to impact.</h2>
-          ${steps([['Discover', 'Understand your idea, goals and users.', '', 'violet'], ['Define', 'Create MVP scope and product roadmap.', '', 'blue'], ['Design', 'Build intuitive and modern UI/UX.', '', 'violet'], ['Develop', 'AI-assisted engineering for faster delivery.', '', 'blue'], ['Test', 'Ensure quality, security and performance.', '', 'green'], ['Deploy', 'Launch to real users and gather feedback.', '', 'blue']], 6)}
-        `)}
-      </section>
-
-      <section class="py-8">
-        ${wrap(`
-          <div class="flex flex-wrap justify-between items-end gap-4 mb-5">
-            <div>
-              <div class="text-[11px] font-bold tracking-wider text-slate-600 uppercase">Flexible Engagement Models</div>
-              <h2 class="text-3xl font-extrabold mt-1">Work with us the way you prefer.</h2>
-            </div>
-            <p class="text-sm text-[var(--muted)] max-w-xs">From fixed-price MVP to dedicated teams, we offer flexible models for different needs.</p>
-          </div>
-          <div class="grid gap-4 md:grid-cols-3">
-            ${[['violet', 'database', 'Fixed Price Project', 'Ideal for MVPs and well-defined scope.', ['Clear scope and timeline', 'Predictable cost', 'Best for MVP and small/medium projects']], ['blue', 'users', 'Dedicated Team', 'For ongoing product development.', ['Dedicated engineers', 'Full flexibility', 'Best for long-term development']], ['violet', 'message-square', 'Advisory &amp; Consulting', 'Strategy, architecture and technical guidance.', ['Product strategy &amp; roadmap', 'Technology consulting', 'Best for early-stage and growth-stage']]].map(c => `
-              <div class="card p-5">
-                <div class="flex items-center gap-3">
-                  ${tile(c[0], c[1])}
-                  <div>
-                    <h3 class="font-bold text-sm">${c[2]}</h3>
-                    <p class="text-[11px] text-[var(--muted)]">${c[3]}</p>
-                  </div>
-                </div>
-                <ul class="text-xs space-y-2 mt-4">
-                  ${checks(c[4], 'text-blue-600')}
-                </ul>
-              </div>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      <section class="py-8">
-        ${wrap(`
-          <div class="flex justify-between items-end mb-5">
-            <div>
-              <div class="text-[11px] font-bold tracking-wider text-slate-600 uppercase">Frequently Asked Questions</div>
-              <h2 class="text-3xl font-extrabold mt-1">Everything you need to know.</h2>
-            </div>
-            <a href="#faq" class="text-xs font-bold text-blue-600 inline-flex items-center gap-1">View all FAQs ${arrow}</a>
-          </div>
-          <div class="grid gap-3 md:grid-cols-2" id="faq">
-            ${[['How long does it take to build an MVP?', 'Most MVPs ship in 4 – 12 weeks depending on scope and AI complexity.'], ['How much does an MVP cost?', 'MVP Starter begins from ₹2.5L, AI MVP from ₹4.5L and MVP → Scale from ₹6L.'], ['What technologies do you use?', 'We use modern web, mobile, cloud and AI stacks including LLMs, RAG and agents.'], ['Do you provide post-launch support?', 'Yes. Ongoing support and continuous improvement are available after launch.']].map(f => `
-              <div class="faq card">
-                <button class="w-full flex justify-between items-center p-4 text-xs font-semibold text-left" aria-expanded="false" onclick="this.parentElement.classList.toggle('open');this.setAttribute('aria-expanded',this.parentElement.classList.contains('open'))">
-                  ${f[0]}
-                  <span class="plus text-lg leading-none">+</span>
+      <article class="card p-6 flex gap-5">
+        ${tile('violet', 'lightbulb', 'tile-lg shrink-0')}
+        <div>
+          <h3 class="font-bold">Example Ideas We Can Analyze</h3>
+          <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-[13px] mt-4">
+            ${[
+        'AI tool for automating insurance claims', 'AI-powered research intelligence platform',
+        'Healthcare document processing platform', 'Internal knowledge assistant for enterprises',
+        'AI interview preparation app', 'AI-driven resume builder',
+        'B2B vendor risk monitoring platform', 'Custom industry-specific AI solution'
+      ].map(t => `
+              <li>
+                <button type="button" class="example-idea" data-fill="${t}">
+                  <span class="text-accent">→</span> ${t}
                 </button>
-                <p class="faq-a">${f[1]}</p>
-              </div>
-            `).join('')}
-          </div>
-        `)}
-      </section>
-
-      <section id="cta" class="cta-band text-white rounded-2xl mx-5 max-w-7xl xl:mx-auto my-12 p-8 md:p-10 grid gap-8 lg:grid-cols-[1.2fr_1fr] items-center">
-        <div>
-          <div class="text-[11px] font-bold tracking-wider uppercase text-white/70">Ready to build?</div>
-          <h2 class="text-3xl font-extrabold mt-2">Let's turn your idea into a product.</h2>
-          <p class="text-sm text-white/80 mt-2">Whether you're starting from scratch or looking to scale, Inbuilt AI is your partner from idea to impact.</p>
-        </div>
-        <div>
-          <div class="flex flex-wrap gap-3">
-            ${btn('Build My MVP', '#/mvp')}
-            <a href="mailto:hello@inbuilt.ai" class="btn border border-white/50 text-white hover:bg-white/10">Talk to an Expert</a>
-          </div>
-          <ul class="flex flex-wrap gap-4 mt-4 text-[11px] text-white/80">
-            ${['Free consultation', 'Expert guidance', 'No obligation'].map(x => `
-              <li class="flex items-center gap-1">
-                ${ic('check-circle-2', 'w-3.5 h-3.5 text-emerald-400')}${x}
-              </li>
-            `).join('')}
+              </li>`).join('')}
           </ul>
         </div>
-      </section>
-    `;
+      </article>
+    </div>
+  </section>
 
-    const nav = ['Solutions|#/services', 'Services|#/services', 'Industries|#/', 'How We Work|#/mvp', 'Resources|#/validate', 'About|#/'];
-    const navAlt = ['Services|#/services', 'How It Works|#/mvp', 'Solutions|#/', 'Case Studies|#/', 'About|#/', 'Resources|#/validate'];
+  ${ctaBand({
+        label: 'Arrive at a smarter decision',
+        title: 'Validate with DataThick. Build with Inbuilt.',
+        text: 'Turn your idea into a data-backed opportunity and then into a working product.'
+      })}
+`;
 
-    function chrome(route) {
-      const alt = route === 'services';
-      $('#brand').innerHTML = alt
-        ? `<span class="flex items-center gap-2"><span class="text-2xl font-extrabold text-blue-600 leading-none">iA</span><span class="leading-none"><b class="block text-sm font-extrabold">Inbuilt AI</b><small class="text-[7px] tracking-wider text-slate-500">IDEAS. PRODUCTS. IMPACT.</small></span></span>`
-        : `<span class="block leading-none"><b class="block text-xl font-extrabold tracking-tight">INBUILT</b><small class="text-[7px] tracking-[.2em] text-slate-500">AI · SOFTWARE · DATA</small></span>`;
-      const items = (alt ? navAlt : nav).map(n => n.split('|'));
-      const mk = (a, c) => `<a href="${a[1]}" class="nav-link ${c} ${(a[1] === '#/' + route || (a[1] === '#/services' && alt && a[0] === 'Services')) && a[1] !== '#/' ? 'active' : ''}">${a[0]}${['Solutions', 'Industries', 'Resources'].includes(a[0]) ? ic('chevron-down', 'w-3 h-3') : ''}</a>`;
-      $('#nav').innerHTML = items.map(a => mk(a, '')).join('');
-      $('#mobile-nav').innerHTML = items.map(a => mk(a, '')).join('');
-      $('#hdr-cta').textContent = alt ? 'Build My MVP' : 'Start a Project';
-      $('#hdr-cta').href = alt ? '#/mvp' : '#/validate';
-      const foot = (l) => l.map(x => `<a href="${x[1]}" class="hover:text-[var(--primary)] transition">${x[0]}</a>`).join('');
-      const social = `<div class="flex gap-4">${['linkedin', 'twitter', 'youtube'].map(s => `<a href="#" aria-label="${s}" class="text-slate-800 hover:text-[var(--primary)] transition">${ic(s, 'w-4 h-4')}</a>`).join('')}</div>`;
-      $('#footer').innerHTML = alt
-        ? wrap(`<div class="py-10 grid gap-8 md:grid-cols-[1.2fr_1fr_1fr_1fr_1.3fr]"><div><b class="text-lg"><span class="text-blue-600">iA</span> Inbuilt AI</b><p class="text-[10px] text-slate-500 mt-1 mb-4">IDEAS. PRODUCTS. IMPACT.</p>${social}</div>${[['Services', ['MVP Starter', 'AI MVP', 'MVP to Scale', 'Custom Solutions']], ['Company', ['About Us', 'Our Process', 'Case Studies', 'Careers']], ['Resources', ['Blog', 'Guides', 'FAQ', 'Docs']]].map(c => `<div><h4 class="font-bold text-xs mb-3">${c[0]}</h4><ul class="space-y-2 text-xs text-slate-600">${c[1].map(x => `<li><a href="#/services" class="hover:text-[var(--primary)]">${x}</a></li>`).join('')}</ul></div>`).join('')}<div><h4 class="font-bold text-xs mb-2">Stay updated</h4><p class="text-xs text-slate-600 mb-3">Get the latest on AI, product engineering and innovation.</p><form class="flex gap-2" onsubmit="return submitForm(event)"><input type="email" required class="field" placeholder="Enter your email" aria-label="Email"><button class="btn !bg-blue-600 text-white !px-3" aria-label="Subscribe">${arrow}</button></form></div></div><div class="border-t border-[var(--line)] py-4 flex flex-wrap justify-between gap-2 text-[11px] text-slate-500"><span>© 2026 Inbuilt AI. All rights reserved.</span><span class="flex gap-5"><a href="#" class="hover:text-[var(--primary)]">Privacy Policy</a><a href="#" class="hover:text-[var(--primary)]">Terms of Service</a><a href="#" class="hover:text-[var(--primary)]">Contact Us</a></span></div>`)
-        : wrap(`<div class="py-6 flex flex-wrap items-center justify-between gap-6"><div class="flex items-center gap-6"><span class="block leading-none"><b class="block text-xl font-extrabold">INBUILT</b><small class="text-[7px] tracking-[.2em] text-slate-500">AI · SOFTWARE · DATA</small></span><p class="text-[11px] text-slate-500 leading-snug">Inbuilt is a brand of SoftwareMent Private Limited.<br>© 2026 Inbuilt. All rights reserved.</p></div><nav class="flex flex-wrap gap-6 text-[11px] text-slate-600" aria-label="Footer">${foot([['Solutions', '#/services'], ['Services', '#/services'], ['Industries', '#/'], ['Resources', '#/validate'], ['About', '#/'], ['Contact', '#cta']])}</nav>${social}</div>`);
+    views.mvp = () => `
+  <section class="hero-light">
+    <div class="max-w-7xl mx-auto px-5 py-12 grid gap-10 lg:grid-cols-2 items-center">
+      <div>
+        ${breadcrumb('Build an MVP')}
+        ${eyebrow('Build with confidence', 'rocket')}
+        <h1 class="text-4xl md:text-[52px] font-extrabold leading-[1.1] tracking-tight mt-5">
+          Turn Your Idea Into a <span class="grad-text">Working AI Product</span>
+        </h1>
+        <p class="text-[15px] text-slate-700 leading-relaxed mt-5 max-w-md">
+          We help you take your concept from idea to a market-ready MVP. From strategy and design
+          to development and launch — with AI at the core.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          ${button({ label: 'Build My MVP', scroll: 'mvp-form' })}
+          ${button({ label: 'Talk to an Expert', href: '#/services', variant: 'light' })}
+        </div>
+        ${heroChecks(['Fast time to market', 'AI-powered solutions', 'End-to-end support'])}
+      </div>
+
+      <div>
+        <div class="app-mock text-white">
+          <div class="flex items-center justify-between text-xs font-bold mb-4">
+            <span class="tracking-wide">INBUILT</span>
+            <span>MVP Development</span>
+            <span class="chip bg-brand text-white">Deploy</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            ${[['68%', 'Total Progress'], ['12/18', 'Features'], ['3/4', 'Sprint'], ['2 Weeks', 'ETA']].map(([v, l]) => `
+              <div class="bg-white/10 rounded-lg p-2.5">
+                <div class="font-bold text-sm">${v}</div>
+                <div class="text-[9px] text-white/60 mt-0.5">${l}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-4">
+          ${['Modern Architecture', 'AI Integration', 'Scalable &amp; Secure', 'Rapid Development', 'Production Ready']
+        .map(t => `<span class="card px-3 py-1.5 text-[11px] font-semibold">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'Our MVP Development Process', subtitle: 'A proven, structured approach from idea to a working product.', link: 'Learn More About Our Process', href: '#/services' })}
+      ${steps([
+          { tone: 'blue', title: 'Discovery &amp; Validation', text: 'Understand your idea, goals, target users and technical feasibility.' },
+          { tone: 'violet', title: 'Product Strategy', text: 'Define scope, features, business model and roadmap.' },
+          { tone: 'green', title: 'UI/UX Design', text: 'Design a modern, user-friendly product experience.' },
+          { tone: 'orange', title: 'MVP Development', text: 'Build with AI integration and modern architecture.' },
+          { tone: 'pink', title: 'Testing &amp; Launch', text: 'Deploy, validate with users and iterate.' },
+          { tone: 'blue', title: 'Scale to Production', text: 'Add advanced features and scale.' }
+        ], 'sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6')}
+    </div>
+  </section>
+
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5 grid gap-6 lg:grid-cols-[.9fr_1.1fr] items-start">
+      <div id="mvp-form">
+        ${ideaForm({
+          id: 'mvp',
+          step: true,
+          title: 'Get Started with Your MVP',
+          subtitle: 'Share a few details and we\'ll prepare a tailored MVP plan for you.',
+          placeholder: 'Describe your idea, target users, key features, and the main problem it solves...',
+          lastLabel: 'Target Users',
+          lastPlaceholder: 'Select target users',
+          lastOptions: ['Consumers', 'Businesses', 'Enterprises', 'Internal teams'],
+          submit: 'Next: Define Requirements'
+        })}
+      </div>
+
+      <div class="rounded-2xl bg-slate-50 border border-line p-6">
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-6">
+          <div>
+            <h2 class="text-2xl font-extrabold">What You Get</h2>
+            <p class="text-sm text-muted mt-1.5">A complete MVP package to turn your idea into a real product.</p>
+          </div>
+          <a href="#/services" class="text-link shrink-0">View Detailed Deliverables${arrow}</a>
+        </div>
+        ${iconCards([
+          { tone: 'blue', icon: 'file-text', title: 'Product Strategy &amp; PRD', text: 'Detailed product strategy, feature set and technical roadmap.' },
+          { tone: 'violet', icon: 'layout', title: 'UI/UX Design', text: 'Modern, responsive and user-friendly design.' },
+          { tone: 'green', icon: 'sparkles', title: 'AI Integration', text: 'Integration of LLMs, AI agents, RAG, and domain-specific AI capabilities.' },
+          { tone: 'blue', icon: 'code-2', title: 'Full Stack Development', text: 'Web, mobile or desktop application development.' },
+          { tone: 'pink', icon: 'cloud', title: 'Testing &amp; Deployment', text: 'QA, deployment and production setup.' },
+          { tone: 'green', icon: 'headphones', title: 'Ongoing Support', text: 'Post-launch support and continuous improvement.' }
+        ], 'sm:grid-cols-3')}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5">
+      ${sectionHeading({ title: 'Example MVPs We Can Build', subtitle: 'Real-world inspired examples across industries.', link: 'View All Examples', href: '#/mvp' })}
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        ${MVP_EXAMPLES.map(item => `
+          <article class="card card-hover overflow-hidden flex flex-col">
+            <div class="photo h-32 relative">
+              <img src="${img(item.photo)}" alt="${item.title}" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()">
+            </div>
+            <div class="p-4 flex flex-col flex-1">
+              <h3 class="font-bold text-[13px] leading-snug">${item.title}</h3>
+              <div class="flex flex-wrap gap-1.5 my-3">${chips(item.tags)}</div>
+              <p class="text-xs text-muted leading-relaxed mt-auto">${item.text}</p>
+            </div>
+          </article>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-4">
+    <div class="max-w-7xl mx-auto px-5 grid gap-10 lg:grid-cols-2">
+      <div>
+        ${sectionHeading({ title: 'Engagement Models', subtitle: 'Flexible options based on your needs.', link: 'View Pricing Guide', href: '#/services' })}
+        <div class="grid gap-4 sm:grid-cols-3">
+          ${[
+        { tone: 'red', icon: 'rocket', title: 'MVP Package', items: ['Defined scope', 'Fixed milestone pricing', 'Working MVP in 4–12 weeks'] },
+        { tone: 'blue', icon: 'users', title: 'Dedicated Team', items: ['For complex products', 'Flexible engagement', 'Scale as per needs'] },
+        { tone: 'orange', icon: 'star', title: 'End-to-End Product', items: ['MVP to production', 'Ongoing support', 'Productization &amp; scale'] }
+      ].map(m => `
+            <article class="card p-4 flex flex-col">
+              <div class="flex items-center gap-2.5 font-bold text-[13px]">${tile(m.tone, m.icon, 'tile-sm')}${m.title}</div>
+              <div class="my-4">${checkList(m.items, 'text-accent')}</div>
+              <a href="#/services" class="btn btn-outline w-full mt-auto !py-2">View Details${arrow}</a>
+            </article>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        ${sectionHeading({ title: 'Why Build with Inbuilt?', subtitle: 'More than development — a true product partner.' })}
+        <div class="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+          ${[
+        { tone: 'red', icon: 'target', title: 'Business-first approach', text: 'We focus on your business goals, not just technology.' },
+        { tone: 'blue', icon: 'cpu', title: 'AI-native development', text: 'Modern AI stack and best practices.' },
+        { tone: 'blue', icon: 'briefcase', title: 'Domain expertise', text: 'Healthcare, insurance, SaaS and more.' },
+        { tone: 'orange', icon: 'trophy', title: 'Product mindset', text: 'We build reusable capabilities that can evolve into products.' }
+      ].map(w => `
+            <div class="flex gap-3">
+              ${tile(w.tone, w.icon, 'shrink-0')}
+              <div>
+                <h3 class="font-bold text-[13px]">${w.title}</h3>
+                <p class="text-xs text-muted leading-relaxed mt-1">${w.text}</p>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-5 my-14">
+    <div class="band-mountain rounded-2xl text-white p-8 md:p-10 grid gap-8 lg:grid-cols-[1.1fr_1fr] items-center">
+      <div>
+        ${eyebrow('Ready to build?', 'rocket').replace('eyebrow', 'eyebrow eyebrow-dark')}
+        <h2 class="text-2xl md:text-3xl font-extrabold leading-tight mt-4">Let's turn your idea into a working MVP.</h2>
+        <p class="text-sm text-white/80 mt-2">Get a tailored plan, timeline and estimate from our experts.</p>
+        <div class="flex flex-wrap gap-3 mt-6">
+          ${button({ label: 'Build My MVP', scroll: 'mvp-form' })}
+          ${button({ label: 'Talk to Our Team', href: '#/services', variant: 'light' })}
+        </div>
+      </div>
+      ${statsRow([['50+', 'MVPs Delivered'], ['30+', 'Clients Supported'], ['10+', 'Industries Served'], ['90%', 'Projects to Production']])}
+    </div>
+  </section>
+`;
+
+
+    views.services = () => `
+  <section class="hero-light">
+    <div class="max-w-7xl mx-auto px-5 py-14 grid gap-10 lg:grid-cols-2 items-center">
+      <div>
+        <p class="kicker">Our Services</p>
+        <h1 class="text-4xl md:text-[52px] font-extrabold leading-[1.1] tracking-tight mt-3">
+          From idea to impact with <span class="text-accent">AI-powered product engineering.</span>
+        </h1>
+        <p class="text-[15px] text-slate-700 leading-relaxed mt-5 max-w-md">
+          Whether you're validating a new idea, building an AI-powered product, or scaling an existing
+          platform, Inbuilt AI provides the right expertise, technology and process to bring your vision to life.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          ${button({ label: 'Build My MVP', href: '#/mvp' })}
+          <a href="#/" data-scroll="services-cta" class="btn btn-light">${icon('calendar', 'w-3.5 h-3.5')}Schedule a Call</a>
+        </div>
+        <ul class="flex flex-wrap gap-x-6 gap-y-3 mt-8 text-xs font-medium">
+          ${[['zap', 'Faster delivery'], ['wallet', 'Cost efficient'], ['headphones', 'End-to-end support']].map(([n, l]) => `
+            <li class="flex items-center gap-2">${tile('green', n, 'tile-xs')}${l}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="app-mock text-white">
+        <div class="text-sm font-bold mb-5">Your Product Journey</div>
+        <div class="flex justify-between">
+          ${['Discover', 'Design', 'Build', 'Test', 'Deploy'].map((label, i) => `
+            <div class="text-center text-[11px] flex flex-col items-center gap-1.5">
+              <span class="grid place-items-center w-9 h-9 rounded-full ${i === 4 ? 'bg-brand' : 'bg-emerald-500'}">${icon(i === 4 ? 'rocket' : 'check', 'w-4 h-4')}</span>
+              ${label}
+            </div>`).join('')}
+        </div>
+        <div class="grid grid-cols-3 gap-2.5 mt-6 text-center">
+          ${[['12', 'Features'], ['6 Weeks', 'Delivery Time'], ['40%', 'Lower Cost']].map(([v, l]) => `
+            <div class="bg-white/10 rounded-lg p-3">
+              <div class="font-extrabold">${v}</div>
+              <div class="text-[10px] text-white/60 mt-0.5">${l}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div>
+          <p class="kicker">Our Core Services</p>
+          <h2 class="text-3xl font-extrabold tracking-tight mt-2">Choose the right service for your journey.</h2>
+        </div>
+        <p class="text-sm text-muted max-w-sm leading-relaxed">
+          We offer flexible, outcome-driven services designed for founders, startups and businesses
+          at every stage of product development.
+        </p>
+      </div>
+
+      <div class="grid gap-5 md:grid-cols-3">
+        ${[
+        {
+          tone: 'violet', icon: 'box', name: 'MVP Starter', price: 'From ₹2.5L', text: 'Turn your idea into a working MVP.', cta: 'Build My MVP', btn: 'btn-primary', check: 'text-accent',
+          items: ['Product discovery &amp; requirements', 'UI/UX design (web / mobile)', 'Backend, database &amp; APIs', 'Deployment &amp; basic analytics', '4 – 8 weeks delivery']
+        },
+        {
+          tone: 'blue', icon: 'brain', name: 'AI MVP', price: 'From ₹4.5L', text: 'Build AI-powered products and agents.', cta: 'Build My AI MVP', btn: 'btn-blue', check: 'text-accent',
+          items: ['AI/ML integration (LLM, RAG, Agents)', 'AI workflow automation', 'Modern web &amp; mobile applications', 'Scalable architecture', '6 – 12 weeks delivery']
+        },
+        {
+          tone: 'green', icon: 'bar-chart-3', name: 'MVP → Scale', price: 'From ₹6L', text: 'Make your product production-ready.', cta: 'Scale My Product', btn: 'btn-green', check: 'text-emerald-500',
+          items: ['Architecture review &amp; optimization', 'Performance &amp; security', 'Cloud infrastructure &amp; CI/CD', 'Monitoring &amp; observability', 'Ongoing support &amp; new features']
+        }
+      ].map(s => `
+          <article class="card card-hover p-6 flex flex-col">
+            <div class="flex items-start justify-between">
+              ${tile(s.tone, s.icon, 'tile-lg')}
+              <span class="chip bg-violet-100 text-violet-700">${s.price}</span>
+            </div>
+            <h3 class="font-bold text-lg mt-5">${s.name}</h3>
+            <p class="text-sm text-muted mt-1 mb-5">${s.text}</p>
+            <div class="mb-7">${checkList(s.items, s.check)}</div>
+            <a href="#/mvp" class="btn ${s.btn} w-full mt-auto !py-3">${s.cta}${arrow}</a>
+          </article>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5 grid gap-10 lg:grid-cols-[.8fr_1.2fr] items-center">
+      <div>
+        <p class="kicker">Why Choose Inbuilt AI</p>
+        <h2 class="text-3xl font-extrabold tracking-tight leading-tight mt-2">A better way to build modern products.</h2>
+        <p class="text-sm text-muted leading-relaxed mt-4 mb-6">
+          We combine AI acceleration with experienced product engineers to deliver high-quality
+          products faster, at lower cost and with reduced risk.
+        </p>
+        ${button({ label: 'Let\'s build together', scroll: 'services-cta', variant: 'blue' })}
+      </div>
+      ${iconCards([
+        { tone: 'blue', icon: 'zap', title: 'AI-Accelerated Development', text: 'Leverage AI tools and automation to speed up development cycles.' },
+        { tone: 'blue', icon: 'users', title: 'Experienced Engineering Team', text: 'Skilled product engineers with real-world experience across industries.' },
+        { tone: 'red', icon: 'target', title: 'Product-Focused Approach', text: 'We build what matters for your business, not just code.' },
+        { tone: 'violet', icon: 'layers', title: 'Modern Technology', text: 'Scalable, secure and future-ready architecture.' },
+        { tone: 'blue', icon: 'file-text', title: 'Transparent Process', text: 'Clear timelines, regular updates and collaboration.' },
+        { tone: 'green', icon: 'headphones', title: 'Ongoing Support', text: 'Post-launch support and continuous improvement.' }
+      ], 'sm:grid-cols-3')}
+    </div>
+  </section>
+
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5">
+      <p class="kicker">Our Process</p>
+      <h2 class="text-3xl font-extrabold tracking-tight mt-2 mb-8">A clear and proven journey from idea to impact.</h2>
+      ${steps([
+        { tone: 'violet', title: 'Discover', text: 'Understand your idea, goals and users.' },
+        { tone: 'blue', title: 'Define', text: 'Create MVP scope and product roadmap.' },
+        { tone: 'violet', title: 'Design', text: 'Build intuitive and modern UI/UX.' },
+        { tone: 'blue', title: 'Develop', text: 'AI-assisted engineering for faster delivery.' },
+        { tone: 'green', title: 'Test', text: 'Ensure quality, security and performance.' },
+        { tone: 'blue', title: 'Deploy', text: 'Launch to real users and gather feedback.' }
+      ], 'sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6')}
+    </div>
+  </section>
+
+  <section class="pb-14">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div>
+          <p class="kicker">Flexible Engagement Models</p>
+          <h2 class="text-3xl font-extrabold tracking-tight mt-2">Work with us the way you prefer.</h2>
+        </div>
+        <p class="text-sm text-muted max-w-xs leading-relaxed">
+          From fixed-price MVP to dedicated teams, we offer flexible models for different needs.
+        </p>
+      </div>
+      <div class="grid gap-5 md:grid-cols-3">
+        ${[
+        { tone: 'violet', icon: 'database', title: 'Fixed Price Project', text: 'Ideal for MVPs and well-defined scope.', items: ['Clear scope and timeline', 'Predictable cost', 'Best for MVP and small/medium projects'] },
+        { tone: 'blue', icon: 'users', title: 'Dedicated Team', text: 'For ongoing product development.', items: ['Dedicated engineers', 'Full flexibility', 'Best for long-term development'] },
+        { tone: 'violet', icon: 'message-square', title: 'Advisory &amp; Consulting', text: 'Strategy, architecture and technical guidance.', items: ['Product strategy &amp; roadmap', 'Technology consulting', 'Best for early-stage and growth-stage'] }
+      ].map(m => `
+          <article class="card p-6">
+            <div class="flex items-center gap-3">
+              ${tile(m.tone, m.icon, 'shrink-0')}
+              <div>
+                <h3 class="font-bold text-sm">${m.title}</h3>
+                <p class="text-xs text-muted mt-0.5">${m.text}</p>
+              </div>
+            </div>
+            <div class="mt-5">${checkList(m.items, 'text-accent')}</div>
+          </article>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-4">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="kicker">Frequently Asked Questions</p>
+          <h2 class="text-3xl font-extrabold tracking-tight mt-2">Everything you need to know.</h2>
+        </div>
+        <button type="button" class="text-link" data-action="toggle-faqs">View all FAQs${arrow}</button>
+      </div>
+      <div class="grid gap-3 md:grid-cols-2 items-start">
+        ${FAQS.map(([q, a]) => `
+          <div class="faq card">
+            <button type="button" class="faq-q" aria-expanded="false">
+              <span>${q}</span>
+              <span class="faq-plus" aria-hidden="true">+</span>
+            </button>
+            <p class="faq-a">${a}</p>
+          </div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section id="services-cta" class="max-w-7xl mx-auto px-5 my-14">
+    <div class="band-navy rounded-2xl text-white p-8 md:p-10 grid gap-8 lg:grid-cols-[1.2fr_1fr] items-center">
+      <div>
+        <p class="kicker !text-white/70">Ready to build?</p>
+        <h2 class="text-3xl font-extrabold leading-tight mt-2">Let's turn your idea into a product.</h2>
+        <p class="text-sm text-white/80 leading-relaxed mt-2">
+          Whether you're starting from scratch or looking to scale, Inbuilt AI is your partner from idea to impact.
+        </p>
+      </div>
+      <div>
+        <div class="flex flex-wrap gap-3">
+          ${button({ label: 'Build My MVP', href: '#/mvp' })}
+          <a href="mailto:hello@inbuilt.ai" class="btn btn-ghost">Talk to an Expert</a>
+        </div>
+        <ul class="flex flex-wrap gap-x-5 gap-y-2 mt-4 text-xs text-white/80">
+          ${['Free consultation', 'Expert guidance', 'No obligation'].map(t =>
+        `<li class="flex items-center gap-1.5">${icon('check-circle-2', 'w-3.5 h-3.5 text-emerald-400')}${t}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  </section>
+`;
+
+
+    function renderNav() {
+      const link = item => `
+    <a href="${item.href}" class="nav-link" data-key="${item.key || ''}">
+      <span class="nav-label" data-text="${item.label}">${item.label}</span>
+      ${item.menu ? icon('chevron-down', 'nav-chevron') : ''}
+    </a>`;
+
+      $('#nav').innerHTML = NAV.map(link).join('');
+      $('#mobile-nav').innerHTML = `<div class="flex flex-col py-1">${NAV.map(item => `
+    <a href="${item.href}" class="mobile-link" data-key="${item.key || ''}">${item.label}</a>`).join('')}</div>`;
     }
 
-    function route() {
-      const r = (location.hash.replace(/^#\/?/, '').split('?')[0]) || 'home';
-      const key = views[r] ? r : 'home';
-      if (['form', 'sample', 'cta', 'faq'].includes(r)) { const t = document.getElementById(r); t && t.scrollIntoView({ behavior: 'smooth' }); return; }
-      $('#app').innerHTML = `<div class="view active">${views[key]()}</div>`;
-      chrome(key === 'home' ? '' : key);
-      $('#mobile-nav').classList.add('hidden');
+    function renderFooter() {
+      const links = [['Solutions', '#/services'], ['Services', '#/services'], ['Industries', '#/'], ['Resources', '#/validate'], ['About', '#/'], ['Contact', '#/services']];
+
+      $('#footer').innerHTML = `
+    <div class="max-w-7xl mx-auto px-5 py-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-6">
+      <div class="flex items-center gap-6">
+        <a href="#/" class="brand" aria-label="Inbuilt AI home">
+          <span class="brand-mark">INBUILT</span>
+          <span class="brand-tag">AI · SOFTWARE · DATA</span>
+        </a>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          Inbuilt is a brand of SoftwareMent Private Limited.<br>
+          © 2026 Inbuilt. All rights reserved.
+        </p>
+      </div>
+
+      <nav class="flex flex-wrap gap-x-7 gap-y-2 text-xs text-slate-600" aria-label="Footer">
+        ${links.map(([label, href]) => `<a href="${href}" class="hover:text-brand transition-colors">${label}</a>`).join('')}
+      </nav>
+
+      <div class="flex gap-4">
+        ${[['linkedin', 'LinkedIn'], ['twitter', 'X'], ['youtube', 'YouTube']].map(([n, l]) => `
+          <a href="#/" aria-label="${l}" class="text-slate-800 hover:text-brand transition-colors">${icon(n, 'w-4 h-4')}</a>`).join('')}
+      </div>
+    </div>`;
+    }
+
+    function setActiveNav(route) {
+      const currentHash = location.hash || '#/';
+      $$('.nav-link, .mobile-link').forEach(a => {
+        const keyMatch = a.dataset.key && a.dataset.key === route;
+        const hrefMatch = a.getAttribute('href') === currentHash;
+        const active = keyMatch || hrefMatch;
+
+        a.classList.toggle('is-active', Boolean(active));
+        active ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current');
+      });
+    }
+
+
+    function currentRoute() {
+      const name = location.hash.replace(/^#\/?/, '').split('?')[0] || 'home';
+      return views[name] ? name : 'home';
+    }
+
+    function render() {
+      const route = currentRoute();
+      $('#app').innerHTML = `<div class="view">${views[route]()}</div>`;
+      setActiveNav(route);
+      closeMobileNav();
       lucide.createIcons();
       window.scrollTo({ top: 0 });
     }
 
-    function submitForm(e) {
-      e.preventDefault();
-      const b = e.target.querySelector('button.btn');
-      const t = b.innerHTML;
-      b.textContent = 'Thank you — we\'ll be in touch';
-      setTimeout(() => { b.innerHTML = t; lucide.createIcons(); e.target.reset(); }, 2500);
-      return false;
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const offset = $('.site-header').offsetHeight + 16;
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
     }
 
-    $('#menu-btn').addEventListener('click', () => $('#mobile-nav').classList.toggle('hidden'));
-    addEventListener('hashchange', route);
-    route();
+    function closeMobileNav() {
+      $('#mobile-nav').classList.add('hidden');
+      $('#menu-btn').setAttribute('aria-expanded', 'false');
+    }
+
+
+    function openModal(message) {
+      $('#modal-text').textContent = message;
+      $('#modal').hidden = false;
+      document.body.classList.add('modal-open');
+      $('#modal .btn').focus();
+    }
+
+    function closeModal() {
+      $('#modal').hidden = true;
+      document.body.classList.remove('modal-open');
+    }
+
+    function validateForm(form) {
+      let valid = true;
+      ['title', 'description'].forEach(name => {
+        const field = form.elements[name];
+        const empty = !field.value.trim();
+        field.classList.toggle('is-invalid', empty);
+        $(`[data-error="${name}"]`, form).classList.toggle('is-visible', empty);
+        if (empty) valid = false;
+      });
+      return valid;
+    }
+
+    document.addEventListener('click', event => {
+      const target = event.target;
+
+      const scroller = target.closest('[data-scroll]');
+      if (scroller) {
+        event.preventDefault();
+        scrollToId(scroller.dataset.scroll);
+        return;
+      }
+
+      const idea = target.closest('[data-fill]');
+      if (idea) {
+        const form = $('[data-form="validate"]');
+        form.elements.title.value = idea.dataset.fill;
+        form.elements.title.dispatchEvent(new Event('input', { bubbles: true }));
+        scrollToId('validate-form');
+        form.elements.description.focus({ preventScroll: true });
+        return;
+      }
+
+      const faq = target.closest('.faq-q');
+      if (faq) {
+        const item = faq.parentElement;
+        const open = item.classList.toggle('open');
+        faq.setAttribute('aria-expanded', open);
+        return;
+      }
+
+      if (target.closest('[data-action="toggle-faqs"]')) {
+        const items = $$('.faq');
+        const openAll = items.some(i => !i.classList.contains('open'));
+        items.forEach(i => {
+          i.classList.toggle('open', openAll);
+          $('.faq-q', i).setAttribute('aria-expanded', openAll);
+        });
+        return;
+      }
+
+      if (target.closest('[data-action="search"]')) {
+        openModal('Site search is coming soon. For now, use the navigation to explore Inbuilt AI.');
+        return;
+      }
+
+      if (target.closest('[data-close]')) closeModal();
+    });
+
+    document.addEventListener('input', event => {
+      const field = event.target;
+      if (field.matches('[data-form] textarea')) {
+        $('[data-counter]', field.parentElement).textContent = `${field.value.length}/1000`;
+      }
+      if (field.matches('[data-form] .field')) {
+        field.classList.remove('is-invalid');
+        const error = $(`[data-error="${field.name}"]`, field.form);
+        if (error) error.classList.remove('is-visible');
+      }
+    });
+
+    document.addEventListener('submit', event => {
+      const form = event.target.closest('[data-form]');
+      if (!form) return;
+      event.preventDefault();
+      if (!validateForm(form)) return;
+
+      const button = $('button[type="submit"]', form);
+      const original = button.innerHTML;
+      const title = form.elements.title.value.trim();
+      button.disabled = true;
+      button.textContent = 'Submitting…';
+
+      setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = original;
+        lucide.createIcons();
+        form.reset();
+        $('[data-counter]', form).textContent = '0/1000';
+        openModal(`Thanks — we've received "${title}". Our team will get back to you within one business day.`);
+      }, 700);
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !$('#modal').hidden) closeModal();
+    });
+
+    $('#menu-btn').addEventListener('click', () => {
+      const nav = $('#mobile-nav');
+      const hidden = nav.classList.toggle('hidden');
+      $('#menu-btn').setAttribute('aria-expanded', String(!hidden));
+    });
+
+    window.addEventListener('hashchange', render);
+
+    renderNav();
+    renderFooter();
+    render();
   </script>
 </body>
+
 </html>

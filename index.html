@@ -332,14 +332,311 @@
     </div>`;
     }
 
+    /* ---------- Solutions / Industries components ---------- */
+
+    function centeredHeading({ lead, accent, subtitle }) {
+      return `
+          <div class="text-center max-w-2xl mx-auto mb-10">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+              ${lead} <span class="text-brand">${accent}</span>
+            </h2>
+            <p class="text-sm text-muted leading-relaxed mt-3">${subtitle}</p>
+          </div>`;
+    }
+
+    function heroStats(stats) {
+      return `
+          <ul class="hero-stats">
+            ${stats.map(stat => `
+              <li class="hero-stat">
+                <span class="hero-stat-icon">${icon(stat.icon, 'w-5 h-5')}</span>
+                <span class="flex flex-col">
+                  <strong class="hero-stat-value">${stat.value}</strong>
+                  <span class="hero-stat-label">${stat.label}</span>
+                </span>
+              </li>`).join('')}
+          </ul>`;
+    }
+
+    function solutionCard(item) {
+      return `
+          <article id="${item.slug}" class="card card-hover solution-card">
+            <span class="tile tile-lg tile-outline">${icon(item.icon)}</span>
+            <h3 class="solution-title">${item.title}</h3>
+            <p class="solution-text">${item.text}</p>
+            <a href="#/mvp" class="learn-link">Learn More${arrow}</a>
+          </article>`;
+    }
+
+    function industryCard(item) {
+      return `
+          <article id="${item.slug}" class="card card-hover industry-card">
+            <div class="industry-photo">
+              <div class="industry-frame">
+                <img src="${img(item.photo, 600)}" alt="${item.title}" loading="lazy" onerror="this.remove()">
+              </div>
+              <span class="tile industry-icon">${icon(item.icon)}</span>
+            </div>
+            <div class="industry-body">
+              <h3 class="solution-title">${item.title}</h3>
+              <p class="solution-text">${item.text}</p>
+              <a href="#/validate" class="learn-link">Learn More${arrow}</a>
+            </div>
+          </article>`;
+    }
+
+    function ctaPanel({ kicker, title, text, primary, secondary, visual }) {
+      return `
+          <section class="max-w-7xl mx-auto px-5 my-14">
+            <div class="cta-panel">
+              <div class="relative z-10">
+                <p class="cta-kicker">${kicker}</p>
+                <h2 class="text-3xl md:text-[34px] font-extrabold leading-tight tracking-tight mt-3">${title}</h2>
+                <p class="text-sm text-white/80 leading-relaxed mt-3 max-w-md">${text}</p>
+                <div class="flex flex-wrap gap-3 mt-7">
+                  ${button(primary)}
+                  ${button(secondary)}
+                </div>
+              </div>
+              ${visual}
+            </div>
+          </section>`;
+    }
+
+    function floatPill(iconName, label, x, y, index) {
+      return `
+          <span class="float-pill" style="--x:${x};--y:${y};--i:${index}">
+            <span class="float-pill-icon">${icon(iconName)}</span>
+            ${label}
+          </span>`;
+    }
+
+    function floatChip(iconName, x, y, index) {
+      return `
+          <span class="float-chip" style="--x:${x};--y:${y};--i:${index}">
+            ${icon(iconName)}
+          </span>`;
+    }
+
+    function isoStage() {
+      return `
+          <div class="iso-stage" aria-hidden="true">
+            <span class="iso-plane" style="--w:46%;--h:50%;--x:48%;--y:2%;--o:.9"></span>
+            <span class="iso-plane" style="--w:42%;--h:46%;--x:4%;--y:30%;--o:.7"></span>
+            <span class="iso-plane" style="--w:40%;--h:42%;--x:46%;--y:56%;--o:.55"></span>
+
+            <div class="iso-core">${icon('box')}</div>
+
+            ${floatPill('workflow', 'Automate', '52%', '6%', 0)}
+            ${floatPill('activity', 'Analyze', '70%', '34%', 1)}
+            ${floatPill('maximize-2', 'Scale', '6%', '74%', 2)}
+            ${floatPill('sparkles', 'Predict', '62%', '78%', 3)}
+          </div>`;
+    }
+
+    function globeStage() {
+      const chips = [
+        ['shopping-cart', '22%', '8%'],
+        ['heart-pulse', '68%', '2%'],
+        ['clapperboard', '86%', '30%'],
+        ['shield-check', '2%', '40%'],
+        ['truck', '16%', '74%'],
+        ['landmark', '74%', '76%']
+      ];
+
+      return `
+          <div class="globe-stage" aria-hidden="true">
+            <span class="globe-ring"></span>
+            <div class="globe"></div>
+            <span class="globe-badge">${icon('bar-chart-3')}</span>
+            ${chips.map(([name, x, y], i) => floatChip(name, x, y, i)).join('')}
+          </div>`;
+    }
+
+    function dashboardStage() {
+      const bars = [30, 42, 36, 55, 48, 70, 84];
+
+      return `
+          <div class="visual-stage" aria-hidden="true">
+            <div class="dash-panel dash-panel-back"></div>
+            <div class="dash-panel">
+              <div class="dash-head"><span></span><span></span><span></span></div>
+              <div class="dash-bars">
+                ${bars.map(h => `<span style="--h:${h}%"></span>`).join('')}
+              </div>
+            </div>
+
+            <div class="iso-core" style="--x:84%;--y:62%;--s:26%">${icon('box')}</div>
+
+            ${floatChip('workflow', '2%', '14%', 0)}
+            ${floatChip('home', '76%', '2%', 1)}
+          </div>`;
+    }
+
+    function laptopStage() {
+      const bars = [28, 40, 34, 52, 46, 68, 82];
+      const chips = [
+        ['graduation-cap', '8%', '10%'],
+        ['landmark', '32%', '0%'],
+        ['heart-pulse', '78%', '8%'],
+        ['shopping-cart', '90%', '46%'],
+        ['factory', '78%', '78%'],
+        ['truck', '2%', '56%']
+      ];
+
+      return `
+          <div class="visual-stage" aria-hidden="true">
+            <div class="laptop">
+              <div class="laptop-screen">
+                <div class="dash-bars">
+                  ${bars.map(h => `<span style="--h:${h}%"></span>`).join('')}
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+            ${chips.map(([name, x, y], i) => floatChip(name, x, y, i)).join('')}
+          </div>`;
+    }
+
+    const SOLUTION_ITEMS = [
+      {
+        slug: 'intelligent-automation',
+        icon: 'settings',
+        title: 'Intelligent Automation',
+        menuText: 'Automate workflows with AI',
+        text: 'Automate repetitive tasks, streamline workflows, and reduce operational costs with AI.'
+      },
+      {
+        slug: 'data-analytics',
+        icon: 'bar-chart-3',
+        title: 'Data &amp; Analytics',
+        menuText: 'Turn data into insights',
+        text: 'Turn your data into actionable insights with advanced analytics and machine learning.'
+      },
+      {
+        slug: 'conversational-ai',
+        icon: 'message-circle',
+        title: 'Conversational AI',
+        menuText: 'Chat and voice experiences',
+        text: 'Build intelligent chat and voice experiences for your customers and employees.'
+      },
+      {
+        slug: 'document-intelligence',
+        icon: 'file-text',
+        title: 'Document Intelligence',
+        menuText: 'Process unstructured data',
+        text: 'Extract, understand, and process data from unstructured documents with AI.'
+      },
+      {
+        slug: 'predictive-intelligence',
+        icon: 'brain',
+        title: 'Predictive Intelligence',
+        menuText: 'Anticipate trends and risks',
+        text: 'Anticipate trends, reduce risks, and make smarter decisions with AI models.'
+      },
+      {
+        slug: 'ai-integration-services',
+        icon: 'cloud-upload',
+        title: 'AI Integration Services',
+        menuText: 'Integrate AI into your systems',
+        text: 'Seamlessly integrate AI into your existing systems and workflows.'
+      }
+    ];
+
+    const INDUSTRY_ITEMS = [
+      {
+        slug: 'healthcare',
+        icon: 'heart-pulse',
+        title: 'Healthcare',
+        menuText: 'AI for better patient care',
+        text: 'Improve patient outcomes, streamline operations, and enhance care delivery with AI.',
+        photo: '1576091160399-112ba8d25d1d'
+      },
+      {
+        slug: 'finance-banking',
+        icon: 'landmark',
+        title: 'Finance &amp; Banking',
+        menuText: 'Secure and intelligent finance',
+        text: 'Detect fraud, manage risk, and deliver personalized financial services.',
+        photo: '1611974789855-9c2a0a7236a3'
+      },
+      {
+        slug: 'retail-ecommerce',
+        icon: 'shopping-cart',
+        title: 'Retail &amp; E-commerce',
+        menuText: 'Personalized shopping experiences',
+        text: 'Drive personalized experiences, optimize inventory, and boost sales.',
+        photo: '1472851294608-062f824d29cc'
+      },
+      {
+        slug: 'manufacturing',
+        icon: 'factory',
+        title: 'Manufacturing',
+        menuText: 'Smart and efficient production',
+        text: 'Enhance productivity, predict failures, and enable smart manufacturing.',
+        photo: '1565793298595-6a879b1d9492'
+      },
+      {
+        slug: 'education',
+        icon: 'graduation-cap',
+        title: 'Education',
+        menuText: 'AI for learning and administration',
+        text: 'Enable personalized learning and improve administrative efficiency.',
+        photo: '1503676260728-1c00da094a0b'
+      },
+      {
+        slug: 'government',
+        icon: 'building-2',
+        title: 'Government',
+        menuText: 'Transparent and efficient services',
+        text: 'Improve citizen services, ensure compliance, and drive transparency.',
+        photo: '1555848962-6e79363ec58f'
+      },
+      {
+        slug: 'media-entertainment',
+        icon: 'clapperboard',
+        title: 'Media &amp; Entertainment',
+        menuText: 'Engaging content with AI',
+        text: 'Create engaging experiences and optimize content with AI insights.',
+        photo: '1478720568477-152d9b164e26'
+      },
+      {
+        slug: 'logistics-supply-chain',
+        icon: 'truck',
+        title: 'Logistics &amp; Supply Chain',
+        menuText: 'Smarter, faster supply chains',
+        text: 'Optimize operations, predict demand, and build resilient supply chains.',
+        photo: '1586528116311-ad8dd3c8310d'
+      }
+    ];
+
+    const MENUS = {
+      solutions: {
+        base: '#/solutions',
+        overview: { icon: 'zap', title: 'All AI Solutions', text: 'Overview of our solutions' },
+        items: SOLUTION_ITEMS
+      },
+      industries: {
+        base: '#/industries',
+        overview: { icon: 'layout-grid', title: 'All Industries', text: 'Overview of industries' },
+        items: INDUSTRY_ITEMS
+      }
+    };
 
     const NAV = [
-      { label: 'Solutions', href: '#/services', menu: true },
+      { label: 'Solutions', href: '#/solutions', key: 'solutions', menu: 'solutions' },
       { label: 'Services', href: '#/services', key: 'services' },
-      { label: 'Industries', href: '#/', menu: true },
+      { label: 'Industries', href: '#/industries', key: 'industries', menu: 'industries' },
       { label: 'How We Work', href: '#/mvp', key: 'mvp' },
-      { label: 'Resources', href: '#/validate', menu: true, key: 'validate' },
-      { label: 'About', href: '#/', key: 'home' }
+      { label: 'Resources', href: '#/validate', key: 'validate' },
+      { label: 'About', href: '#/' }
+    ];
+
+    const TRUST = [
+      { icon: 'award', title: 'Proven Expertise', text: '500+ successful implementations' },
+      { icon: 'brain', title: 'Tailored Solutions', text: 'Industry-specific approach' },
+      { icon: 'timer', title: 'Faster Time to Value', text: 'Drive measurable results quickly' },
+      { icon: 'life-buoy', title: 'End-to-End Support', text: 'From strategy to continuous optimization' }
     ];
 
     const PARTNERS = [
@@ -1098,18 +1395,218 @@
     </div>
   </section>
 `;
+    /* ---------- Solutions ---------- */
+    views.solutions = () => `
+  <section class="hero-indigo hero-curve text-white">
+    <div class="max-w-7xl mx-auto px-5 pt-14 pb-20 grid gap-10 lg:grid-cols-[1.05fr_1fr] items-center">
+      <div>
+        <p class="hero-kicker">Solutions</p>
 
+        <h1 class="text-4xl md:text-[50px] font-extrabold leading-[1.12] tracking-tight mt-4">
+          AI Solutions<br>
+          Built for <span class="grad-text-vivid">Real Impact</span>
+        </h1>
+
+        <p class="text-[15px] text-white/80 leading-relaxed mt-5 max-w-md">
+          From intelligent automation to advanced analytics, our AI solutions help you
+          streamline operations, improve decision-making, and unlock growth across every function.
+        </p>
+
+        <div class="flex flex-wrap gap-3 mt-8">
+          ${button({ label: 'Get Started', href: '#/mvp' })}
+          ${button({ label: 'Talk to an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false })}
+        </div>
+
+        ${heroStats([
+      { icon: 'users', value: '500+', label: 'Businesses Empowered' },
+      { icon: 'gauge', value: '40%', label: 'Average Efficiency Gain' },
+      { icon: 'shield-check', value: '99.9%', label: 'Enterprise-Grade Security' }
+    ])}
+      </div>
+
+      ${isoStage()}
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-5">
+      ${centeredHeading({
+      lead: 'Our AI',
+      accent: 'Solutions',
+      subtitle: 'End-to-end AI solutions designed to solve real-world problems and deliver measurable results.'
+    })}
+
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        ${SOLUTION_ITEMS.map(solutionCard).join('')}
+      </div>
+    </div>
+  </section>
+
+  ${ctaPanel({
+      kicker: 'Ready to build your solution?',
+      title: 'Let\'s Create a Custom<br>AI Solution for You',
+      text: 'Work with our experts to design and implement AI solutions tailored to your unique business goals.',
+      primary: { label: 'Get Started', href: '#/mvp' },
+      secondary: { label: 'Schedule a Demo', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false },
+      visual: dashboardStage()
+    })}
+
+  <section class="pb-16">
+    <div class="max-w-7xl mx-auto px-5">
+      ${centeredHeading({
+      lead: 'Why Choose',
+      accent: 'Inbuilt AI',
+      subtitle: 'A trusted partner for AI-driven innovation.'
+    })}
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        ${TRUST.map(item => `
+          <article class="card p-5 flex items-center gap-4">
+            <span class="tile tile-lg tile-outline">${icon(item.icon)}</span>
+            <div>
+              <h3 class="font-bold text-[13px] leading-snug">${item.title}</h3>
+              <p class="text-xs text-muted leading-relaxed mt-1">${item.text}</p>
+            </div>
+          </article>`).join('')}
+      </div>
+    </div>
+  </section>
+`;
+
+    /* ---------- Industries ---------- */
+    views.industries = () => `
+  <section class="hero-indigo hero-curve text-white">
+    <div class="max-w-7xl mx-auto px-5 pt-14 pb-20 grid gap-10 lg:grid-cols-[1.05fr_1fr] items-center">
+      <div>
+        <p class="hero-kicker">Industries</p>
+
+        <h1 class="text-4xl md:text-[50px] font-extrabold leading-[1.12] tracking-tight mt-4">
+          AI for <span class="grad-text-vivid">Every Industry</span>
+        </h1>
+
+        <p class="text-[15px] text-white/80 leading-relaxed mt-5 max-w-md">
+          Tailored AI solutions to address the unique challenges and opportunities across
+          industries, helping businesses innovate, optimize, and grow.
+        </p>
+
+        <div class="flex flex-wrap gap-3 mt-8">
+          ${button({ label: 'Get Started', href: '#/mvp' })}
+          ${button({ label: 'Talk to an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false })}
+        </div>
+
+        ${heroStats([
+      { icon: 'bar-chart-3', value: '500+', label: 'Businesses Empowered' },
+      { icon: 'globe', value: '30+', label: 'Industries Served' },
+      { icon: 'gauge', value: '40%', label: 'Average Efficiency Gain' }
+    ])}
+      </div>
+
+      ${globeStage()}
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-5">
+      ${centeredHeading({
+      lead: 'Industries',
+      accent: 'We Serve',
+      subtitle: 'Discover how Inbuilt AI is making a difference across various industries with tailored solutions.'
+    })}
+
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        ${INDUSTRY_ITEMS.map(industryCard).join('')}
+      </div>
+    </div>
+  </section>
+
+  ${ctaPanel({
+      kicker: 'Industry-specific AI solutions',
+      title: 'Find the Right AI Solution<br>for Your Industry',
+      text: 'Every industry has unique challenges. Let our experts help you discover how AI can create real impact for your business.',
+      primary: { label: 'Get Started', href: '#/mvp' },
+      secondary: { label: 'Connect with an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false },
+      visual: laptopStage()
+    })}
+`;
+
+    function navLink(item) {
+      return `
+    <a href="${item.href}" class="nav-link" data-key="${item.key || ''}">
+      <span class="nav-label">${item.label}</span>
+    </a>`;
+    }
+
+    function navDropdown(item) {
+      const menu = MENUS[item.menu];
+
+      const entries = [
+        { ...menu.overview, href: menu.base },
+        ...menu.items.map(entry => ({
+          icon: entry.icon,
+          title: entry.title,
+          text: entry.menuText,
+          href: `${menu.base}/${entry.slug}`
+        }))
+      ];
+
+      return `
+    <div class="nav-item" data-menu="${item.menu}">
+      <button type="button"
+              class="nav-link nav-trigger"
+              data-key="${item.key}"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="menu-${item.menu}">
+        <span class="nav-label">${item.label}</span>
+        ${icon('chevron-down', 'nav-chevron')}
+      </button>
+
+      <div class="dropdown" id="menu-${item.menu}">
+        <div class="dropdown-panel">
+          ${entries.map(entry => `
+            <a href="${entry.href}" class="dropdown-item">
+              <span class="tile tile-sm tone-violet">${icon(entry.icon)}</span>
+              <span class="dropdown-copy">
+                <span class="dropdown-title">${entry.title}</span>
+                <span class="dropdown-text">${entry.text}</span>
+              </span>
+              ${icon('chevron-right', 'dropdown-arrow')}
+            </a>`).join('')}
+        </div>
+      </div>
+    </div>`;
+    }
+
+    function mobileLink(item) {
+      return `<a href="${item.href}" class="mobile-link" data-key="${item.key || ''}">${item.label}</a>`;
+    }
+
+    function mobileGroup(item) {
+      const menu = MENUS[item.menu];
+
+      return `
+    <details class="mobile-group">
+      <summary class="mobile-link" data-key="${item.key}">
+        <span>${item.label}</span>
+        ${icon('chevron-down', 'mobile-chevron')}
+      </summary>
+      <div class="mobile-sub">
+        <a href="${menu.base}" class="mobile-sublink">${menu.overview.title}</a>
+        ${menu.items.map(entry => `
+          <a href="${menu.base}/${entry.slug}" class="mobile-sublink">${entry.title}</a>`).join('')}
+      </div>
+    </details>`;
+    }
 
     function renderNav() {
-      const link = item => `
-    <a href="${item.href}" class="nav-link" data-key="${item.key || ''}">
-      <span class="nav-label" data-text="${item.label}">${item.label}</span>
-      ${item.menu ? icon('chevron-down', 'nav-chevron') : ''}
-    </a>`;
+      $('#nav').innerHTML = NAV
+        .map(item => item.menu ? navDropdown(item) : navLink(item))
+        .join('');
 
-      $('#nav').innerHTML = NAV.map(link).join('');
-      $('#mobile-nav').innerHTML = `<div class="flex flex-col py-1">${NAV.map(item => `
-    <a href="${item.href}" class="mobile-link" data-key="${item.key || ''}">${item.label}</a>`).join('')}</div>`;
+      $('#mobile-nav').innerHTML = `
+    <div class="flex flex-col py-1">
+      ${NAV.map(item => item.menu ? mobileGroup(item) : mobileLink(item)).join('')}
+    </div>`;
     }
 
     function renderFooter() {
@@ -1152,18 +1649,36 @@
     }
 
 
-    function currentRoute() {
-      const name = location.hash.replace(/^#\/?/, '').split('?')[0] || 'home';
-      return views[name] ? name : 'home';
+    let activeRoute = null;
+
+    function parseHash() {
+      const [path] = location.hash.replace(/^#\/?/, '').split('?');
+      const [name = '', sub = ''] = path.split('/');
+      const route = name || 'home';
+
+      return { route: views[route] ? route : 'home', sub };
     }
 
     function render() {
-      const route = currentRoute();
-      $('#app').innerHTML = `<div class="view">${views[route]()}</div>`;
-      setActiveNav(route);
+      const { route, sub } = parseHash();
+      const changed = route !== activeRoute;
+
+      if (changed) {
+        activeRoute = route;
+        $('#app').innerHTML = `<div class="view">${views[route]()}</div>`;
+        setActiveNav(route);
+        lucide.createIcons();
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
       closeMobileNav();
-      lucide.createIcons();
-      window.scrollTo({ top: 0 });
+      closeAllMenus();
+
+      if (sub) {
+        requestAnimationFrame(() => scrollToId(sub));
+      } else if (!changed) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     function scrollToId(id) {
@@ -1287,6 +1802,94 @@
       if (event.key === 'Escape' && !$('#modal').hidden) closeModal();
     });
 
+    /* ---------- Navigation dropdowns ---------- */
+
+    const hoverMenus = window.matchMedia('(hover: hover)');
+    let menuTimer;
+
+    function openMenu(item) {
+      clearTimeout(menuTimer);
+      closeAllMenus(item);
+      item.classList.add('is-open');
+      $('.nav-trigger', item).setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu(item) {
+      item.classList.remove('is-open');
+      $('.nav-trigger', item).setAttribute('aria-expanded', 'false');
+    }
+
+    function closeAllMenus(except = null) {
+      $$('.nav-item.is-open').forEach(item => {
+        if (item !== except) closeMenu(item);
+      });
+    }
+
+    function bindNavMenus() {
+      $$('.nav-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          if (hoverMenus.matches) openMenu(item);
+        });
+
+        item.addEventListener('mouseleave', () => {
+          if (!hoverMenus.matches) return;
+          menuTimer = setTimeout(() => closeMenu(item), 120);
+        });
+
+        item.addEventListener('focusout', event => {
+          if (!item.contains(event.relatedTarget)) closeMenu(item);
+        });
+      });
+    }
+
+    document.addEventListener('click', event => {
+      const trigger = event.target.closest('.nav-trigger');
+
+      if (trigger) {
+        const item = trigger.closest('.nav-item');
+        const isMouseClick = event.detail > 0;
+
+        if (isMouseClick && hoverMenus.matches) {
+          location.hash = MENUS[item.dataset.menu].base;
+          closeAllMenus();
+        } else {
+          item.classList.contains('is-open') ? closeMenu(item) : openMenu(item);
+        }
+        return;
+      }
+
+      if (event.target.closest('.dropdown-item')) {
+        closeAllMenus();
+        return;
+      }
+
+      if (!event.target.closest('.nav-item')) closeAllMenus();
+      if (event.target.closest('#mobile-nav a')) closeMobileNav();
+    });
+
+    document.addEventListener('keydown', event => {
+      const openItem = $('.nav-item.is-open');
+
+      if (event.key === 'Escape' && openItem) {
+        closeMenu(openItem);
+        $('.nav-trigger', openItem).focus();
+        return;
+      }
+
+      const item = event.target.closest('.nav-item');
+      if (!item || !['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+
+      event.preventDefault();
+      openMenu(item);
+
+      const links = $$('.dropdown-item', item);
+      const index = links.indexOf(document.activeElement);
+      const down = event.key === 'ArrowDown';
+      const next = index === -1 ? (down ? 0 : links.length - 1) : index + (down ? 1 : -1);
+
+      links[(next + links.length) % links.length].focus();
+    });
+
     $('#menu-btn').addEventListener('click', () => {
       const nav = $('#mobile-nav');
       const hidden = nav.classList.toggle('hidden');
@@ -1296,6 +1899,7 @@
     window.addEventListener('hashchange', render);
 
     renderNav();
+    bindNavMenus();
     renderFooter();
     render();
   </script>

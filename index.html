@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
   <title>Inbuilt AI</title>
   <link rel="icon" type="image/png" href="./assets/images/inbuilt_ai_logo.jpg">
 
@@ -86,7 +87,6 @@
 
     const img = (id, w = 640) =>
       `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
-
 
     function button({ label, href = '#/', variant = 'primary', scroll = '', arrowIcon = true, extra = '' }) {
       const target = scroll ? `href="#/" data-scroll="${scroll}"` : `href="${href}"`;
@@ -290,7 +290,7 @@
             <span class="chip bg-emerald-100 text-emerald-700 shrink-0">High Opportunity</span>
           </div>
 
-          <div class="grid grid-cols-3 gap-2.5 mt-4">
+          <div class="grid grid-cols-1 min-[420px]:grid-cols-3 gap-2.5 mt-4">
             ${[['$12.5B', 'Est. Market Size'], ['18%', 'CAGR (2024-2030)'], ['High', 'Opportunity Score']].map(([v, l]) => `
               <div class="border border-line rounded-lg p-2.5">
                 <div class="font-extrabold text-sm">${v}</div>
@@ -333,8 +333,6 @@
       </div>
     </div>`;
     }
-
-    /* ---------- Solutions / Industries components ---------- */
 
     function centeredHeading({ lead, accent, subtitle }) {
       return `
@@ -405,54 +403,11 @@
           </section>`;
     }
 
-    function floatPill(iconName, label, x, y, index) {
-      return `
-          <span class="float-pill" style="--x:${x};--y:${y};--i:${index}">
-            <span class="float-pill-icon">${icon(iconName)}</span>
-            ${label}
-          </span>`;
-    }
-
     function floatChip(iconName, x, y, index) {
       return `
           <span class="float-chip" style="--x:${x};--y:${y};--i:${index}">
             ${icon(iconName)}
           </span>`;
-    }
-
-    function isoStage() {
-      return `
-          <div class="iso-stage" aria-hidden="true">
-            <span class="iso-plane" style="--w:46%;--h:50%;--x:48%;--y:2%;--o:.9"></span>
-            <span class="iso-plane" style="--w:42%;--h:46%;--x:4%;--y:30%;--o:.7"></span>
-            <span class="iso-plane" style="--w:40%;--h:42%;--x:46%;--y:56%;--o:.55"></span>
-
-            <div class="iso-core">${icon('box')}</div>
-
-            ${floatPill('workflow', 'Automate', '52%', '6%', 0)}
-            ${floatPill('activity', 'Analyze', '70%', '34%', 1)}
-            ${floatPill('maximize-2', 'Scale', '6%', '74%', 2)}
-            ${floatPill('sparkles', 'Predict', '62%', '78%', 3)}
-          </div>`;
-    }
-
-    function globeStage() {
-      const chips = [
-        ['shopping-cart', '22%', '8%'],
-        ['heart-pulse', '68%', '2%'],
-        ['clapperboard', '86%', '30%'],
-        ['shield-check', '2%', '40%'],
-        ['truck', '16%', '74%'],
-        ['landmark', '74%', '76%']
-      ];
-
-      return `
-          <div class="globe-stage" aria-hidden="true">
-            <span class="globe-ring"></span>
-            <div class="globe"></div>
-            <span class="globe-badge">${icon('bar-chart-3')}</span>
-            ${chips.map(([name, x, y], i) => floatChip(name, x, y, i)).join('')}
-          </div>`;
     }
 
     function dashboardStage() {
@@ -691,7 +646,6 @@
       ['What technologies do you use?', 'We use modern web, mobile, cloud and AI stacks, including LLMs, RAG and agents.'],
       ['Do you provide post-launch support?', 'Yes. Ongoing support and continuous improvement are available after launch.']
     ];
-
 
     const STAGE_CARDS = [
       { icon: 'bot', title: 'Automate', sub: 'Streamline repetitive tasks with AI', accent: 'Smarter Workflows', cta: 'See how we automate', from: '#60A5FA', to: '#4F46E5', x: '0%', y: '4%' },
@@ -1263,7 +1217,6 @@
 
     const views = {};
 
-
     views.home = () => `
   <section class="hero-dark text-white">
     <div class="max-w-7xl mx-auto px-5 py-16 grid gap-12 lg:grid-cols-[1fr_1.1fr] items-center">
@@ -1493,7 +1446,7 @@
         ${heroChecks(['Objective &amp; data-driven', 'Real market insights', 'Actionable recommendations'])}
       </div>
 
-      <div class="grid grid-cols-3 gap-3 items-center">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
         <div class="space-y-3">
           ${[['bar-chart-3', 'Market Analysis'], ['users', 'Customer Signals'], ['code-2', 'Technology Analysis']].map(([n, l]) => `
             <div class="card p-3 flex items-center gap-2.5 text-xs font-semibold">${tile('blue', n, 'tile-sm')}${l}</div>`).join('')}
@@ -1624,7 +1577,7 @@
   <div class="absolute -inset-4 bg-gradient-to-r from-brand/20 via-accent/20 to-indigo-500/20 blur-3xl rounded-full -z-10 pointer-events-none"></div>
 
   <div class="relative w-full bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl overflow-hidden text-white">
-    
+
     <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
       <div class="flex items-center gap-2">
         <img src="./assets/images/logo.png" alt="Inbuilt AI" class="h-6 w-auto brightness-0 invert object-contain" />
@@ -1638,7 +1591,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-      
+
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center relative group hover:border-brand/50 transition-all">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
@@ -1664,7 +1617,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-4 gap-2 bg-black/40 rounded-xl p-3 border border-white/5 text-center">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-black/40 rounded-xl p-3 border border-white/5 text-center">
       <div>
         <div class="text-[10px] text-slate-400">Total Progress</div>
         <div class="text-sm font-black text-white">68%</div>
@@ -1834,7 +1787,6 @@
   </section>
 `;
 
-
     views.services = () => `
   <section class="hero-light">
     <div class="max-w-7xl mx-auto px-5 py-14 grid gap-10 lg:grid-cols-2 items-center">
@@ -1861,7 +1813,7 @@
   <div class="absolute -inset-4 bg-gradient-to-r from-brand/20 via-accent/20 to-indigo-500/20 blur-3xl rounded-full -z-10 pointer-events-none"></div>
 
   <div class="relative w-full bg-slate-900 text-white p-7 rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
-    
+
     <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
       <div class="flex items-center gap-2">
         <img src="./assets/images/logo.png" alt="Inbuilt AI" class="h-6 w-auto brightness-0 invert object-contain" />
@@ -1873,7 +1825,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-      
+
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
@@ -2089,7 +2041,6 @@
     </div>
   </section>
 `;
-    /* ---------- Solutions ---------- */
     views.solutions = () => `
   ${hero({
       kicker: 'Solutions',
@@ -2156,7 +2107,6 @@
   </section>
 `;
 
-    /* ---------- Industries ---------- */
     views.industries = () => `
   ${hero({
       kicker: 'Industries',
@@ -2295,7 +2245,6 @@
           </a>
           <p class="site-footer-copy">Inbuilt.ai is a brand of SoftwareMent Private Limited.</p>
         </div>
-        
 
         <nav class="site-footer-nav" aria-label="Footer">
           ${groups.map(([title, items]) => `
@@ -2316,7 +2265,8 @@
         </div>
       </div>
     </div>
-        <div class="site-footer-bottom">
+
+    <div class="site-footer-bottom">
       <p>© 2026 Inbuilt.ai. All rights reserved.</p>
     </div>`;
     }
@@ -2332,7 +2282,6 @@
         active ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current');
       });
     }
-
 
     let activeRoute = null;
 
@@ -2377,7 +2326,6 @@
       $('#mobile-nav').classList.add('hidden');
       $('#menu-btn').setAttribute('aria-expanded', 'false');
     }
-
 
     function openModal(message) {
       $('#modal-text').textContent = message;
@@ -2486,8 +2434,6 @@
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && !$('#modal').hidden) closeModal();
     });
-
-    /* ---------- Navigation dropdowns ---------- */
 
     const hoverMenus = window.matchMedia('(hover: hover)');
     let menuTimer;

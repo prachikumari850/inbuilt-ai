@@ -2279,29 +2279,45 @@
     }
 
     function renderFooter() {
-      const links = [['Solutions', '#/services'], ['Services', '#/services'], ['Industries', '#/'], ['Resources', '#/validate'], ['About', '#/'], ['Contact', '#/services']];
+      const groups = [
+        ['Explore', [['Solutions', '#/solutions'], ['Services', '#/services'], ['Industries', '#/industries']]],
+        ['Company', [['Resources', '#/validate'], ['About', '#/'], ['Contact', '#/services']]]
+      ];
+      const socials = [['linkedin', 'LinkedIn'], ['twitter', 'X'], ['youtube', 'YouTube']];
 
       $('#footer').innerHTML = `
-    <div class="max-w-7xl mx-auto px-5 py-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-6">
-      <div class="flex items-center gap-6">
-        <a href="#/" class="brand" aria-label="Inbuilt AI home">
-          <img src="./assets/images/logo.png" alt="Inbuilt AI" class="h-9 w-auto object-contain" />
-          <span class="brand-tag">AI · SOFTWARE · DATA</span>
-        </a>
-        <p class="text-[11px] text-slate-500 leading-relaxed">
-          Inbuilt.ai is a brand of SoftwareMent Private Limited.<br>
-          © 2026   Inbuilt.ai   All rights reserved.
-        </p>
-      </div>
+    <div class="site-footer">
+      <div class="site-footer-grid">
+        <div class="site-footer-brand">
+          <a href="#/" class="brand" aria-label="Inbuilt AI home">
+            <img src="./assets/images/logo.png" alt="Inbuilt AI" class="h-9 w-auto object-contain" />
+            <span class="brand-tag">AI · SOFTWARE · DATA</span>
+          </a>
+          <p class="site-footer-copy">Inbuilt.ai is a brand of SoftwareMent Private Limited.</p>
+        </div>
+        
 
-      <nav class="flex flex-wrap gap-x-7 gap-y-2 text-xs text-slate-600" aria-label="Footer">
-        ${links.map(([label, href]) => `<a href="${href}" class="hover:text-brand transition-colors">${label}</a>`).join('')}
-      </nav>
+        <nav class="site-footer-nav" aria-label="Footer">
+          ${groups.map(([title, items]) => `
+            <div class="site-footer-col">
+              <h4 class="site-footer-title">${title}</h4>
+              <ul>
+                ${items.map(([label, href]) => `<li><a href="${href}">${label}</a></li>`).join('')}
+              </ul>
+            </div>`).join('')}
+        </nav>
 
-      <div class="flex gap-4">
-        ${[['linkedin', 'LinkedIn'], ['twitter', 'X'], ['youtube', 'YouTube']].map(([n, l]) => `
-          <a href="#/" aria-label="${l}" class="text-slate-800 hover:text-brand transition-colors">${icon(n, 'w-4 h-4')}</a>`).join('')}
+        <div class="site-footer-social">
+          <h4 class="site-footer-title">Follow us</h4>
+          <div class="site-footer-icons">
+            ${socials.map(([n, l]) => `
+              <a href="#/" aria-label="${l}" class="site-footer-icon">${icon(n, 'w-4 h-4')}</a>`).join('')}
+          </div>
+        </div>
       </div>
+    </div>
+        <div class="site-footer-bottom">
+      <p>© 2026 Inbuilt.ai. All rights reserved.</p>
     </div>`;
     }
 

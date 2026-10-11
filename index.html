@@ -9,7 +9,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;600&display=swap"
     rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -347,16 +348,16 @@
 
     function heroStats(stats) {
       return `
-          <ul class="hero-stats">
-            ${stats.map(stat => `
-              <li class="hero-stat">
-                <span class="hero-stat-icon">${icon(stat.icon, 'w-5 h-5')}</span>
-                <span class="flex flex-col">
-                  <strong class="hero-stat-value">${stat.value}</strong>
-                  <span class="hero-stat-label">${stat.label}</span>
-                </span>
-              </li>`).join('')}
-          </ul>`;
+        <ul class="hero-stats">
+          ${stats.map(stat => `
+            <li class="hero-stat">
+              <span class="hero-stat-icon">${icon(stat.icon, 'w-5 h-5')}</span>
+              <span class="hero-stat-copy">
+                <strong class="hero-stat-value">${stat.value}</strong>
+                <span class="hero-stat-label">${stat.label}</span>
+              </span>
+            </li>`).join('')}
+        </ul>`;
     }
 
     function solutionCard(item) {
@@ -486,14 +487,14 @@
       ];
 
       return `
-          <div class="visual-stage" aria-hidden="true">
-            <div class="laptop">
-              <div class="laptop-screen">
-                <div class="dash-bars">
-                  ${bars.map(h => `<span style="--h:${h}%"></span>`).join('')}
+          <div class="visual-stage" aria-hidden="true" style="min-height: 220px; display: flex; align-items: center; justify-content: center;">
+            <div class="laptop" style="width: 80%; position: relative;">
+              <div class="laptop-screen" style="height: 140px; display: flex; align-items: flex-end; padding: 12px; background: #0B1437; border: 3px solid #1E2A6B; border-radius: 10px 10px 0 0;">
+                <div class="dash-bars" style="display: flex; align-items: flex-end; gap: 6px; width: 100%; height: 100%;">
+                  ${bars.map(h => `<span style="flex: 1; height: ${h}%; background: linear-gradient(180deg, #8FB4FF, #6C5CE7); border-radius: 3px 3px 0 0;"></span>`).join('')}
                 </div>
               </div>
-              <div class="laptop-base"></div>
+              <div class="laptop-base" style="height: 10px; background: linear-gradient(#C7CBE6, #8D93B8); border-radius: 0 0 10px 10px;"></div>
             </div>
             ${chips.map(([name, x, y], i) => floatChip(name, x, y, i)).join('')}
           </div>`;
@@ -691,6 +692,574 @@
       ['Do you provide post-launch support?', 'Yes. Ongoing support and continuous improvement are available after launch.']
     ];
 
+
+    const STAGE_CARDS = [
+      { icon: 'bot', title: 'Automate', sub: 'Streamline repetitive tasks with AI', accent: 'Smarter Workflows', cta: 'See how we automate', from: '#60A5FA', to: '#4F46E5', x: '0%', y: '4%' },
+      { icon: 'bar-chart-3', title: 'Analyze', sub: 'Transform data into insights', accent: 'Instant Insights', cta: 'See how we analyze', from: '#38BDF8', to: '#6366F1', x: '3%', y: '47%' },
+      { icon: 'lightbulb', title: 'Innovate', sub: 'Build next-gen AI solutions', accent: 'Next-Gen AI', cta: 'See how we innovate', from: '#FBBF24', to: '#F97316', x: '70%', y: '12%' },
+      { icon: 'box', title: 'Scale', sub: 'Grow with confidence', accent: 'Confident Growth', cta: 'See how we scale', from: '#F472B6', to: '#8B5CF6', x: '70%', y: '44%' }
+    ];
+
+    const STAGE_SIDEBAR = [
+      ['home', 'Overview'],
+      ['layers', 'Solutions'],
+      ['bar-chart-3', 'Analytics'],
+      ['workflow', 'Automation'],
+      ['plug', 'Integrations'],
+      ['settings', 'Settings']
+    ];
+
+    const STAGE_BARS = [18, 24, 20, 32, 28, 40, 36, 48, 44, 58, 54, 68, 76, 90];
+
+    const STAGE_METRICS = [
+      ['2.8x', 'Faster Operations'],
+      ['40%', 'Cost Reduction'],
+      ['3.5x', 'Productivity']
+    ];
+
+    const STAGE_TILES = [
+      ['settings', '14%', '84%'],
+      ['cloud', '84%', '82%'],
+      ['bar-chart-3', '70%', '91%']
+    ];
+
+    const STAGE_SPARKS = [
+      ['40%', '22%'], ['33%', '30%'], ['52%', '10%'], ['27%', '14%'],
+      ['62%', '4%'], ['46%', '28%'], ['70%', '18%']
+    ];
+
+    function stageRocket() {
+      return `
+        <div class="stage-rocket">
+          <span class="rocket-flame"></span>
+          <svg viewBox="0 0 100 130" class="rocket-body" aria-hidden="true">
+            <defs>
+              <linearGradient id="rocket-hull" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#C7D2FE"/>
+                <stop offset=".45" stop-color="#FFFFFF"/>
+                <stop offset="1" stop-color="#A5B4FC"/>
+              </linearGradient>
+            </defs>
+            <path d="M30 88 L8 124 L34 114 Z" fill="#EF4444"/>
+            <path d="M70 88 L92 124 L66 114 Z" fill="#DC2626"/>
+            <path d="M50 2 C74 26 80 66 70 110 L30 110 C20 66 26 26 50 2 Z" fill="url(#rocket-hull)"/>
+            <path d="M50 2 C60 11 66 22 69 34 L31 34 C34 22 40 11 50 2 Z" fill="#EF4444"/>
+            <circle cx="50" cy="64" r="14" fill="#2563EB" stroke="#E0E7FF" stroke-width="4"/>
+            <circle cx="45" cy="59" r="4.5" fill="#fff" opacity=".55"/>
+            <path d="M36 110 H64 L60 122 H40 Z" fill="#312E81"/>
+          </svg>
+        </div>`;
+    }
+
+    function stageSwirl() {
+      return `
+        <svg class="stage-swirl" viewBox="0 0 500 400" aria-hidden="true">
+          <defs>
+            <linearGradient id="swirl-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#8B7CF6" stop-opacity="0"/>
+              <stop offset=".5" stop-color="#A78BFA"/>
+              <stop offset="1" stop-color="#60A5FA" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M110 300 C170 120 360 70 470 190"/>
+          <path d="M130 320 C200 170 340 120 450 220"/>
+          <path d="M80 250 C140 110 300 60 420 110"/>
+        </svg>`;
+    }
+
+    function stageNotes() {
+      return `
+        <svg class="stage-notes" viewBox="0 0 500 400" aria-hidden="true">
+          <path d="M150 64 C164 50 178 54 184 72" stroke="#F472B6"/>
+          <path class="head" d="M177 67 L184 74 L190 66" stroke="#F472B6"/>
+          <path d="M146 246 C160 236 176 238 188 252" stroke="#F472B6"/>
+          <path class="head" d="M180 252 L189 253 L187 244" stroke="#F472B6"/>
+          <path d="M352 70 C340 54 326 56 318 74" stroke="#A78BFA"/>
+          <path class="head" d="M325 69 L318 75 L317 66" stroke="#A78BFA"/>
+          <path d="M356 266 C342 254 330 258 320 274" stroke="#60A5FA"/>
+          <path class="head" d="M327 268 L320 275 L319 266" stroke="#60A5FA"/>
+          <path d="M440 34 C428 42 422 52 424 66" stroke="#A78BFA"/>
+          <path class="head" d="M418 58 L424 67 L431 59" stroke="#A78BFA"/>
+          <path d="M30 322 C14 304 18 288 34 278" stroke="#F472B6"/>
+          <path class="head" d="M26 282 L34 277 L36 286" stroke="#F472B6"/>
+        </svg>
+        <span class="stage-note" style="--x:80%;--y:-3%">Ideas<br>into impact</span>
+        <span class="stage-note" style="--x:1%;--y:84%">From data<br>to decisions</span>`;
+    }
+
+    function stageCard(card, href, index) {
+      return `
+        <button type="button"
+                class="stage-card backdrop-blur-xl bg-slate-900/80"
+                style="--x:${card.x};--y:${card.y};--c1:${card.from};--c2:${card.to};--i:${index}"
+                data-stage-card
+                data-accent="${card.accent}"
+                data-caption="${card.cta}"
+                data-href="${href}">
+          <span class="stage-card-icon">${icon(card.icon)}</span>
+          <strong>${card.title}</strong>
+          <small>${card.sub}</small>
+        </button>`;
+    }
+
+    function stageLaptop(accent) {
+      return `
+        <div class="stage-laptop">
+          <div class="laptop-lid">
+            <div class="laptop-screen">
+              <aside class="screen-side">
+                <img src="./assets/images/logo.png" alt="Inbuilt.ai" class="screen-logo">
+                <ul>
+                  ${STAGE_SIDEBAR.map(([name, label], i) => `
+                    <li class="${i === 1 ? 'is-on' : ''}">${icon(name)}${label}</li>`).join('')}
+                </ul>
+              </aside>
+
+              <div class="screen-main">
+                <div class="screen-top">
+                  <span class="screen-search"></span>
+                  <span class="screen-chip">${icon('sparkles')}AI Assistant</span>
+                </div>
+
+                <div class="screen-panel">
+                  <h3 class="screen-title">Turn Ideas into<b data-stage-title>${accent}</b></h3>
+                  <div class="screen-chart">
+                    ${STAGE_BARS.map((h, i) => `<span style="--h:${h}%;--i:${i}"></span>`).join('')}
+                    <svg class="screen-trend" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                      <polyline points="0,34 8,31 16,32 24,26 32,27 40,21 48,22 56,16 64,17 72,11 80,12 90,6 100,2"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="screen-metrics">
+                  ${STAGE_METRICS.map(([value, label]) => `
+                    <div><strong>${value}</strong><small>${label}</small></div>`).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="laptop-deck"></div>
+        </div>`;
+    }
+
+    function heroStage({ accent, caption, links }) {
+      return `
+        <div class="hero-stage"
+             data-stage
+             data-accent="${accent}"
+             data-caption="${caption.text}"
+             data-href="${caption.href}">
+          <span class="stage-glow"></span>
+
+          <div class="stage-scene">
+            <span class="stage-ring" style="--s:104%;--t:80%;--d:38s"></span>
+            <span class="stage-ring stage-ring-alt" style="--s:78%;--t:80%;--d:28s"></span>
+
+            ${stageSwirl()}
+            ${stageRocket()}
+            ${STAGE_SPARKS.map(([x, y], i) => `<span class="stage-spark" style="--x:${x};--y:${y};--i:${i}"></span>`).join('')}
+            ${stageLaptop(accent)}
+            ${STAGE_TILES.map(([name, x, y], i) => `
+              <span class="stage-tile" style="--x:${x};--y:${y};--i:${i}">${icon(name)}</span>`).join('')}
+            ${STAGE_CARDS.map((card, i) => stageCard(card, links[i], i)).join('')}
+            ${stageNotes()}
+          </div>
+
+          <a href="${caption.href}" class="stage-caption" data-stage-caption>${caption.text}${arrow}</a>
+        </div>`;
+    }
+
+    const SECTORS = [
+      { icon: 'stethoscope', title: 'Healthcare<br>&amp; Life Sciences', name: 'Healthcare &amp; Life Sciences', x: '2%', y: '12%', from: '#60A5FA', to: '#4F46E5', href: '#/industries/healthcare' },
+      { icon: 'shopping-cart', title: 'Retail &amp;<br>E-commerce', name: 'Retail &amp; E-commerce', x: '36%', y: '0%', from: '#F472B6', to: '#8B5CF6', href: '#/industries/retail-ecommerce' },
+      { icon: 'car', title: 'Automotive<br>&amp; Mobility', name: 'Automotive &amp; Mobility', x: '70%', y: '6%', from: '#38BDF8', to: '#6366F1', href: '#/mvp/mvp-form' },
+      { icon: 'factory', title: 'Manufacturing', name: 'Manufacturing', x: '0%', y: '38%', from: '#A78BFA', to: '#6366F1', href: '#/industries/manufacturing' },
+      { icon: 'radio-tower', title: 'Telecom &amp;<br>Technology', name: 'Telecom &amp; Technology', x: '73%', y: '33%', from: '#22D3EE', to: '#4F46E5', href: '#/mvp/mvp-form' },
+      { icon: 'landmark', title: 'BFSI<br>(Financial Services)', name: 'BFSI (Financial Services)', x: '6%', y: '63%', from: '#FBBF24', to: '#F97316', href: '#/industries/finance-banking' },
+      { icon: 'building-2', title: 'Real Estate<br>&amp; Construction', name: 'Real Estate &amp; Construction', x: '70%', y: '59%', from: '#F472B6', to: '#6366F1', href: '#/mvp/mvp-form' },
+      { icon: 'wind', title: 'Energy &amp;<br>Utilities', name: 'Energy &amp; Utilities', x: '47%', y: '77%', from: '#34D399', to: '#0EA5E9', href: '#/mvp/mvp-form' }
+    ];
+
+    const GLOBE_NODES = [['44%', '38%'], ['57%', '47%'], ['49%', '58%'], ['62%', '34%']];
+
+    const CITY_HEIGHTS = [34, 52, 28, 66, 44, 80, 38, 58, 30, 72, 46, 88, 40, 62, 32, 76, 50, 36, 68, 42, 84, 30, 56, 48, 70, 34, 60, 44];
+
+    function sectorCard(sector, index) {
+      const verb = sector.href.startsWith('#/industries') ? 'Explore' : 'Build AI for';
+
+      return `
+        <button type="button"
+                class="stage-card is-wide backdrop-blur-xl bg-slate-900/80"
+                style="--x:${sector.x};--y:${sector.y};--c1:${sector.from};--c2:${sector.to};--i:${index}"
+                data-stage-card
+                data-accent=""
+                data-caption="${verb} ${sector.name}"
+                data-href="${sector.href}">
+          <span class="stage-card-icon">${icon(sector.icon)}</span>
+          <strong>${sector.title}</strong>
+        </button>`;
+    }
+
+    function stageLinks() {
+      return `
+        <svg class="stage-links" viewBox="0 0 600 480" aria-hidden="true">
+          ${SECTORS.map(sector => {
+        const cx = (parseFloat(sector.x) + 14.5) * 6;
+        const cy = (parseFloat(sector.y) + 7) * 4.8;
+        return `<path d="M${cx} ${cy} L300 229"/>`;
+      }).join('')}
+        </svg>`;
+    }
+
+    function stageArcs() {
+      return `
+        <svg class="stage-arcs" viewBox="0 0 600 480" aria-hidden="true">
+          <defs>
+            <linearGradient id="arc-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#60A5FA" stop-opacity=".1"/>
+              <stop offset=".5" stop-color="#C4B5FD"/>
+              <stop offset="1" stop-color="#F472B6" stop-opacity=".2"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="300" cy="229" rx="232" ry="74" transform="rotate(-20 300 229)"/>
+          <ellipse cx="300" cy="229" rx="214" ry="62" transform="rotate(28 300 229)"/>
+        </svg>`;
+    }
+
+    function stageCity() {
+      const towers = CITY_HEIGHTS
+        .map((h, i) => `<rect x="${i * 21}" y="${100 - h}" width="19" height="${h}"/>`)
+        .join('');
+
+      return `
+        <svg class="stage-city" viewBox="0 0 588 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="city-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2B2F9A" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#0A1235" stop-opacity=".2"/>
+            </linearGradient>
+            <pattern id="city-lights" width="6" height="8" patternUnits="userSpaceOnUse">
+              <rect x="1.5" y="2" width="2" height="2.5" fill="#9CC4FF" opacity=".55"/>
+            </pattern>
+          </defs>
+          <g fill="url(#city-fill)">${towers}</g>
+          <g fill="url(#city-lights)">${towers}</g>
+        </svg>`;
+    }
+
+    function stageRoad() {
+      return `
+        <svg class="stage-road" viewBox="0 0 600 160" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="road-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#6C5CE7" stop-opacity="0"/>
+              <stop offset=".45" stop-color="#8B7CF6"/>
+              <stop offset=".8" stop-color="#F472B6"/>
+              <stop offset="1" stop-color="#F9A8D4"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 140 C150 90 330 150 600 50"/>
+          <path d="M0 154 C170 110 340 160 600 78"/>
+          <path d="M40 120 C200 70 360 128 600 28"/>
+        </svg>`;
+    }
+
+    function sectorStage() {
+      const caption = { text: 'Browse all industries', href: '#/industries/healthcare' };
+
+      return `
+        <div class="hero-stage is-sector"
+             data-stage
+             data-accent=""
+             data-caption="${caption.text}"
+             data-href="${caption.href}">
+          ${stageCity()}
+          ${stageRoad()}
+          <span class="stage-glow"></span>
+
+          <div class="stage-scene">
+            ${stageLinks()}
+            <div class="stage-globe"><span class="globe-land"></span></div>
+            ${GLOBE_NODES.map(([x, y], i) => `<span class="globe-node" style="--x:${x};--y:${y};--i:${i}"></span>`).join('')}
+            ${stageArcs()}
+            ${SECTORS.map(sectorCard).join('')}
+          </div>
+
+          <a href="${caption.href}" class="stage-caption" data-stage-caption>${caption.text}${arrow}</a>
+        </div>`;
+    }
+
+    function heroPoints(points) {
+      return `
+        <ul class="hero-points">
+          ${points.map(point => `
+            <li>${icon('check-circle-2', 'w-4 h-4')}${point}</li>`).join('')}
+        </ul>`;
+    }
+
+    function hero({ crumb = '', kicker, title, text, actions, points = [], stats = [], stage }) {
+      return `
+        <section class="hero-indigo hero-curve text-white">
+          <div class="max-w-7xl mx-auto px-5 pt-14 pb-20 grid gap-12 lg:grid-cols-[1.05fr_1fr] items-center">
+            <div>
+              ${crumb ? `
+                <nav class="hero-crumb" aria-label="Breadcrumb">
+                  <a href="#/">Home</a>
+                  <span>›</span>
+                  <b>${crumb}</b>
+                </nav>` : ''}
+
+              <p class="hero-kicker">${kicker}</p>
+
+              <h1 class="text-4xl md:text-[50px] font-extrabold leading-[1.12] tracking-tight mt-4">${title}</h1>
+
+              <p class="text-[15px] text-white/80 leading-relaxed mt-5 max-w-md">${text}</p>
+
+              <div class="flex flex-wrap gap-3 mt-8">
+                ${actions.map(action => button(action)).join('')}
+              </div>
+
+              ${points.length ? heroPoints(points) : ''}
+              ${stats.length ? heroStats(stats) : ''}
+            </div>
+
+            ${stage}
+          </div>
+        </section>`;
+    }
+
+    function setStageState(stage, { accent, caption, href, card = null }) {
+      $$('[data-stage-card]', stage).forEach(item => item.classList.toggle('is-active', item === card));
+      const title = $('[data-stage-title]', stage);
+      if (title) title.textContent = accent;
+
+      const link = $('[data-stage-caption]', stage);
+      link.setAttribute('href', href);
+      link.innerHTML = `${caption}${arrow}`;
+
+      lucide.createIcons();
+    }
+
+    document.addEventListener('click', event => {
+      const card = event.target.closest('[data-stage-card]');
+      if (!card) return;
+
+      const stage = card.closest('[data-stage]');
+      const reset = card.classList.contains('is-active');
+
+      setStageState(stage, reset
+        ? { accent: stage.dataset.accent, caption: stage.dataset.caption, href: stage.dataset.href }
+        : { accent: card.dataset.accent, caption: card.dataset.caption, href: card.dataset.href, card });
+    });
+
+    document.addEventListener('pointermove', event => {
+      if (event.pointerType === 'touch') return;
+
+      const stage = event.target.closest('[data-stage]');
+      if (!stage) return;
+
+      const box = stage.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width - .5;
+      const y = (event.clientY - box.top) / box.height - .5;
+
+      stage.style.setProperty('--ry', `${x * 14}deg`);
+      stage.style.setProperty('--rx', `${-y * 12}deg`);
+    });
+
+    document.addEventListener('pointerout', event => {
+      const stage = event.target.closest('[data-stage]');
+      if (!stage || stage.contains(event.relatedTarget)) return;
+
+      stage.style.setProperty('--rx', '0deg');
+      stage.style.setProperty('--ry', '0deg');
+    });
+
+    const SEARCH_PAGES = [
+      { title: 'Home', text: 'From idea to intelligence to product', href: '#/', icon: 'home', type: 'Page', keywords: 'start overview' },
+      { title: 'Solutions', text: 'AI solutions built for real impact', href: '#/solutions', icon: 'zap', type: 'Page', keywords: 'ai automation analytics' },
+      { title: 'Industries', text: 'AI for every industry', href: '#/industries', icon: 'globe', type: 'Page', keywords: 'sectors verticals' },
+      { title: 'Services', text: 'MVP Starter, AI MVP and MVP to Scale', href: '#/services', icon: 'layers', type: 'Page', keywords: 'pricing engagement faq support' },
+      { title: 'Validate an Idea', text: 'Get a data-driven opportunity report', href: '#/validate', icon: 'lightbulb', type: 'Page', keywords: 'datathick market research' },
+      { title: 'Build an MVP', text: 'Turn your idea into a working AI product', href: '#/mvp', icon: 'rocket', type: 'Page', keywords: 'process deliverables examples' },
+      { title: 'Idea validation form', text: 'Describe your idea and get a report', href: '#/validate/validate-form', icon: 'file-text', type: 'Section', keywords: 'submit intake' },
+      { title: 'Sample opportunity report', text: 'See what a validation report looks like', href: '#/validate/sample', icon: 'bar-chart-3', type: 'Section', keywords: 'market competitive' },
+      { title: 'MVP intake form', text: 'Share your idea and get a tailored plan', href: '#/mvp/mvp-form', icon: 'clipboard-list', type: 'Section', keywords: 'estimate plan' },
+      { title: 'Schedule a call', text: 'Talk to an expert about your project', href: '#/services/services-cta', icon: 'calendar', type: 'Section', keywords: 'contact demo consultation' }
+    ];
+
+    const plain = value => value.replace(/&amp;/g, '&');
+    const escapeHtml = value => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const escapePattern = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    const searchTerms = query => plain(query).toLowerCase().split(/\s+/).filter(Boolean);
+
+    function searchEntries() {
+      return [
+        ...SEARCH_PAGES,
+        ...SOLUTION_ITEMS.map(item => ({
+          title: item.title, text: item.text, href: `#/solutions/${item.slug}`, icon: item.icon, type: 'Solution'
+        })),
+        ...INDUSTRY_ITEMS.map(item => ({
+          title: item.title, text: item.text, href: `#/industries/${item.slug}`, icon: item.icon, type: 'Industry'
+        }))
+      ];
+    }
+
+    function searchMatches(terms) {
+      const entries = searchEntries();
+      if (!terms.length) return entries.slice(0, 6);
+
+      return entries
+        .map(entry => {
+          const title = plain(entry.title).toLowerCase();
+          const body = [title, plain(entry.text), entry.keywords || '', entry.type].join(' ').toLowerCase();
+
+          if (!terms.every(term => body.includes(term))) return null;
+
+          const score = terms.reduce((sum, term) =>
+            sum + (title.startsWith(term) ? 3 : title.includes(term) ? 2 : 1), 0);
+
+          return { entry, score };
+        })
+        .filter(Boolean)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 7)
+        .map(match => match.entry);
+    }
+
+    function highlight(text, terms) {
+      if (!terms.length) return escapeHtml(text);
+
+      const pattern = new RegExp(`(${terms.map(escapePattern).join('|')})`, 'ig');
+
+      return text
+        .split(pattern)
+        .map((part, i) => i % 2 ? `<mark>${escapeHtml(part)}</mark>` : escapeHtml(part))
+        .join('');
+    }
+
+    function renderSearchResults(query = '') {
+      const terms = searchTerms(query);
+      const results = searchMatches(terms);
+      const list = $('#search-results');
+
+      list.innerHTML = results.length
+        ? results.map((item, i) => `
+            <li role="presentation">
+              <a href="${item.href}" role="option" class="search-item ${i === 0 ? 'is-selected' : ''}" data-search-item>
+                <span class="tile tile-sm tone-violet">${icon(item.icon)}</span>
+                <span class="search-copy">
+                  <strong>${highlight(plain(item.title), terms)}</strong>
+                  <small>${highlight(plain(item.text), terms)}</small>
+                </span>
+                <em class="chip bg-slate-100 text-slate-600">${item.type}</em>
+              </a>
+            </li>`).join('')
+        : `
+            <li class="search-empty">
+              ${icon('search-x', 'w-5 h-5')}
+              <span>No matches for “${escapeHtml(query.trim())}”. Try “automation”, “healthcare” or “MVP”.</span>
+            </li>`;
+
+      lucide.createIcons();
+    }
+
+    function renderSearch() {
+      const panel = document.createElement('section');
+
+      panel.id = 'search-panel';
+      panel.className = 'search-panel';
+      panel.hidden = true;
+      panel.setAttribute('aria-label', 'Site search');
+
+      panel.innerHTML = `
+        <div class="search-inner">
+          <label class="search-field">
+            ${icon('search', 'w-4 h-4')}
+            <input id="search-input"
+                   type="search"
+                   autocomplete="off"
+                   placeholder="Search solutions, industries, pages…"
+                   aria-controls="search-results">
+            <kbd>Esc</kbd>
+          </label>
+          <ul id="search-results" class="search-results" role="listbox"></ul>
+        </div>`;
+
+      $('.site-header').appendChild(panel);
+    }
+
+    function openSearch() {
+      const input = $('#search-input');
+
+      closeAllMenus();
+      closeMobileNav();
+      $('#search-panel').hidden = false;
+      input.value = '';
+      renderSearchResults();
+      input.focus();
+    }
+
+    function closeSearch() {
+      const panel = $('#search-panel');
+      if (panel) panel.hidden = true;
+    }
+
+    function toggleSearch() {
+      $('#search-panel').hidden ? openSearch() : closeSearch();
+    }
+
+    function moveSearchSelection(step) {
+      const items = $$('[data-search-item]');
+      if (!items.length) return;
+
+      const current = items.findIndex(item => item.classList.contains('is-selected'));
+      const next = (current + step + items.length) % items.length;
+
+      items.forEach((item, i) => item.classList.toggle('is-selected', i === next));
+      items[next].scrollIntoView({ block: 'nearest' });
+    }
+
+    document.addEventListener('input', event => {
+      if (event.target.id === 'search-input') renderSearchResults(event.target.value);
+    });
+
+    document.addEventListener('keydown', event => {
+      const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        openSearch();
+        return;
+      }
+
+      if (event.key === '/' && !typing) {
+        event.preventDefault();
+        openSearch();
+        return;
+      }
+
+      if ($('#search-panel').hidden) return;
+
+      if (event.key === 'Escape') {
+        closeSearch();
+        $('[data-action="search"]').focus();
+      } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        moveSearchSelection(event.key === 'ArrowDown' ? 1 : -1);
+      } else if (event.key === 'Enter' && event.target.id === 'search-input') {
+        const selected = $('[data-search-item].is-selected');
+        if (selected) selected.click();
+      }
+    });
+
+    document.addEventListener('click', event => {
+      if ($('#search-panel').hidden) return;
+      if (event.target.closest('[data-search-item]')) return closeSearch();
+      if (!event.target.closest('#search-panel, [data-action="search"]')) closeSearch();
+    });
+
+    window.addEventListener('hashchange', closeSearch);
 
     const views = {};
 
@@ -1052,13 +1621,10 @@
         ${heroChecks(['Fast time to market', 'AI-powered solutions', 'End-to-end support'])}
       </div>
 <div class="relative w-full max-w-2xl mx-auto lg:max-w-none flex justify-center items-center py-6">
-  <!-- Glowing Background Mesh Effect -->
   <div class="absolute -inset-4 bg-gradient-to-r from-brand/20 via-accent/20 to-indigo-500/20 blur-3xl rounded-full -z-10 pointer-events-none"></div>
 
-  <!-- Main Showcase Box / Glass Card -->
   <div class="relative w-full bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl overflow-hidden text-white">
     
-    <!-- Top Header Bar inside Mockup -->
     <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
       <div class="flex items-center gap-2">
         <img src="./assets/images/logo.png" alt="Inbuilt AI" class="h-6 w-auto brightness-0 invert object-contain" />
@@ -1071,10 +1637,8 @@
       </div>
     </div>
 
-    <!-- Central Diagram: Workflow Hub -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
       
-      <!-- Box 1: Idea / Input -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center relative group hover:border-brand/50 transition-all">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
@@ -1083,7 +1647,6 @@
         <div class="text-[10px] text-slate-400 mt-1">Prompt / Spec / Wireframe</div>
       </div>
 
-      <!-- Box 2: Inbuilt AI Engine Core -->
       <div class="bg-gradient-to-b from-brand/30 to-accent/20 border border-brand/50 rounded-2xl p-4 text-center relative group shadow-lg shadow-brand/10">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-brand text-white flex items-center justify-center shadow-md shadow-brand/40">
           <i data-lucide="cpu" class="w-5 h-5"></i>
@@ -1092,7 +1655,6 @@
         <div class="text-[10px] text-brand-light mt-1">AI Agents & Orchestration</div>
       </div>
 
-      <!-- Box 3: Production Release -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center relative group hover:border-emerald-500/50 transition-all">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
           <i data-lucide="rocket" class="w-5 h-5"></i>
@@ -1102,7 +1664,6 @@
       </div>
     </div>
 
-    <!-- Live Metrics Grid -->
     <div class="grid grid-cols-4 gap-2 bg-black/40 rounded-xl p-3 border border-white/5 text-center">
       <div>
         <div class="text-[10px] text-slate-400">Total Progress</div>
@@ -1123,7 +1684,6 @@
     </div>
   </div>
 
-  <!-- Non-Overlapping Floating Feature Pills -->
   <div class="hidden sm:flex absolute -top-4 -left-6 bg-white text-slate-900 shadow-xl border border-slate-200/80 rounded-xl px-3 py-1.5 items-center gap-2 text-xs font-medium animate-bounce" style="animation-duration: 3s;">
     <i data-lucide="layers" class="w-4 h-4 text-brand"></i> Modern Architecture
   </div>
@@ -1298,13 +1858,10 @@
       </div>
 
       <div class="relative w-full max-w-2xl mx-auto flex justify-center items-center py-6">
-  <!-- Glowing Background Mesh Effect -->
   <div class="absolute -inset-4 bg-gradient-to-r from-brand/20 via-accent/20 to-indigo-500/20 blur-3xl rounded-full -z-10 pointer-events-none"></div>
 
-  <!-- Main Clean Glass Card -->
   <div class="relative w-full bg-slate-900 text-white p-7 rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
     
-    <!-- Top Header Bar inside Card -->
     <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
       <div class="flex items-center gap-2">
         <img src="./assets/images/logo.png" alt="Inbuilt AI" class="h-6 w-auto brightness-0 invert object-contain" />
@@ -1315,10 +1872,8 @@
       </span>
     </div>
 
-    <!-- 3-Step Journey Pipeline -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
       
-      <!-- Step 1 -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300">
           <i data-lucide="lightbulb" class="w-5 h-5"></i>
@@ -1327,7 +1882,6 @@
         <div class="text-[10px] text-slate-400 mt-1">Idea & Market Fit</div>
       </div>
 
-      <!-- Step 2 -->
       <div class="bg-gradient-to-b from-brand/30 to-accent/20 border border-brand/50 rounded-2xl p-4 text-center shadow-lg shadow-brand/10">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-brand text-white flex items-center justify-center shadow-md">
           <i data-lucide="cpu" class="w-5 h-5"></i>
@@ -1336,7 +1890,6 @@
         <div class="text-[10px] text-brand-light mt-1">Core Architecture</div>
       </div>
 
-      <!-- Step 3 -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
         <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
           <i data-lucide="rocket" class="w-5 h-5"></i>
@@ -1346,7 +1899,6 @@
       </div>
     </div>
 
-    <!-- Performance Metrics Grid -->
     <div class="grid grid-cols-3 gap-3 text-center bg-black/40 rounded-xl p-4 border border-white/5">
       <div>
         <div class="text-[10px] text-slate-400">Target Features</div>
@@ -1363,7 +1915,6 @@
     </div>
   </div>
 
-  <!-- 4 Clean Floating Feature Pills -->
   <div class="hidden sm:flex absolute -top-4 -left-4 bg-white text-slate-900 shadow-xl border border-slate-200/80 rounded-xl px-3 py-1.5 items-center gap-2 text-xs font-medium animate-bounce z-20" style="animation-duration: 3s;">
     <i data-lucide="layers" class="w-4 h-4 text-brand"></i> Modern Architecture
   </div>
@@ -1540,36 +2091,25 @@
 `;
     /* ---------- Solutions ---------- */
     views.solutions = () => `
-  <section class="hero-indigo hero-curve text-white">
-    <div class="max-w-7xl mx-auto px-5 pt-14 pb-20 grid gap-10 lg:grid-cols-[1.05fr_1fr] items-center">
-      <div>
-        <p class="hero-kicker">Solutions</p>
-
-        <h1 class="text-4xl md:text-[50px] font-extrabold leading-[1.12] tracking-tight mt-4">
-          AI Solutions<br>
-          Built for <span class="grad-text-vivid">Real Impact</span>
-        </h1>
-
-        <p class="text-[15px] text-white/80 leading-relaxed mt-5 max-w-md">
-          From intelligent automation to advanced analytics, our AI solutions help you
-          streamline operations, improve decision-making, and unlock growth across every function.
-        </p>
-
-        <div class="flex flex-wrap gap-3 mt-8">
-          ${button({ label: 'Get Started', href: '#/mvp' })}
-          ${button({ label: 'Talk to an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false })}
-        </div>
-      
-        ${heroStats([
-      { icon: 'users', value: '500+', label: 'Businesses Empowered' },
-      { icon: 'gauge', value: '40%', label: 'Average Efficiency Gain' },
-      { icon: 'shield-check', value: '99.9%', label: 'Enterprise-Grade Security' }
-    ])}
-      </div>
-
-      ${isoStage()}
-    </div>
-  </section>
+  ${hero({
+      kicker: 'Solutions',
+      title: 'AI Solutions<br>Built for <span class="grad-text-vivid">Real Impact</span>',
+      text: 'From intelligent automation to advanced analytics, our AI solutions help you streamline operations, improve decision-making, and unlock growth across every function.',
+      actions: [
+        { label: 'Get Started', href: '#/mvp' },
+        { label: 'Talk to an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false }
+      ],
+      stats: [
+        { icon: 'users', value: '500+', label: 'Businesses Empowered' },
+        { icon: 'gauge', value: '40%', label: 'Average Efficiency Gain' },
+        { icon: 'shield-check', value: '99.9%', label: 'Enterprise-Grade Security' }
+      ],
+      stage: heroStage({
+        accent: 'Intelligent Solutions',
+        caption: { text: 'Browse all solutions', href: '#/solutions/intelligent-automation' },
+        links: ['#/solutions/intelligent-automation', '#/solutions/data-analytics', '#/solutions/conversational-ai', '#/solutions/ai-integration-services']
+      })
+    })}
 
   <section class="py-16">
     <div class="max-w-7xl mx-auto px-5">
@@ -1618,35 +2158,21 @@
 
     /* ---------- Industries ---------- */
     views.industries = () => `
-  <section class="hero-indigo hero-curve text-white">
-    <div class="max-w-7xl mx-auto px-5 pt-14 pb-20 grid gap-10 lg:grid-cols-[1.05fr_1fr] items-center">
-      <div>
-        <p class="hero-kicker">Industries</p>
-
-        <h1 class="text-4xl md:text-[50px] font-extrabold leading-[1.12] tracking-tight mt-4">
-          AI for <span class="grad-text-vivid">Every Industry</span>
-        </h1>
-
-        <p class="text-[15px] text-white/80 leading-relaxed mt-5 max-w-md">
-          Tailored AI solutions to address the unique challenges and opportunities across
-          industries, helping businesses innovate, optimize, and grow.
-        </p>
-
-        <div class="flex flex-wrap gap-3 mt-8">
-          ${button({ label: 'Get Started', href: '#/mvp' })}
-          ${button({ label: 'Talk to an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false })}
-        </div>
-
-        ${heroStats([
-      { icon: 'bar-chart-3', value: '500+', label: 'Businesses Empowered' },
-      { icon: 'globe', value: '30+', label: 'Industries Served' },
-      { icon: 'gauge', value: '40%', label: 'Average Efficiency Gain' }
-    ])}
-      </div>
-
-      ${globeStage()}
-    </div>
-  </section>
+  ${hero({
+      kicker: 'Industries',
+      title: 'AI for <span class="grad-text-vivid title-swoosh">Every Industry</span>',
+      text: 'Tailored AI solutions to address the unique challenges and opportunities across industries, helping businesses innovate, optimize, and grow.',
+      actions: [
+        { label: 'Get Started', href: '#/mvp' },
+        { label: 'Talk to an Expert', href: '#/services/services-cta', variant: 'dark-outline', arrowIcon: false }
+      ],
+      stats: [
+        { icon: 'users', value: '500+', label: 'Businesses Empowered' },
+        { icon: 'globe', value: '30+', label: 'Industries Served' },
+        { icon: 'bar-chart-3', value: '40%', label: 'Average Efficiency Gain' }
+      ],
+      stage: sectorStage()
+    })}
 
   <section class="py-16">
     <div class="max-w-7xl mx-auto px-5">
@@ -1900,7 +2426,7 @@
       }
 
       if (target.closest('[data-action="search"]')) {
-        openModal('Site search is coming soon. For now, use the navigation to explore Inbuilt AI.');
+        toggleSearch();
         return;
       }
 
@@ -2042,6 +2568,7 @@
     window.addEventListener('hashchange', render);
 
     renderNav();
+    renderSearch();
     bindNavMenus();
     renderFooter();
     render();
